@@ -5,7 +5,6 @@
 Project developed in SuperCollider environment for the course of Computer Music Languages and Systems 
 
 The project consists of a Granular Synthesizer that generates foley sounds.
-All the sounds have the same 
 
 - [**GRANULANDS**](#granulands)
   - [Folder Structure](#folder-structure)
