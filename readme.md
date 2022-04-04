@@ -62,6 +62,8 @@ In order to test and use the synthesizer:
    * The main panner window allows the user to visualize the spatial position of the sounds and to move them inside the stereo spectrum by dragging them on the window.
    * ![](./images/Panner.png)
 
+4. The little button on the upper left corner allows the user to set some backgrounds to better visualize the type sounds playing
+
 ## Folder Structure
 
 The project repository contains one supercollider file that contains the code to run the synth and various folders:
