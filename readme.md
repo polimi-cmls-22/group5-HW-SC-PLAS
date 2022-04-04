@@ -14,7 +14,8 @@
 
 Project developed in [SuperCollider](https://supercollider.github.io/) environment for the course of Computer Music Languages and Systems 
 
-Granulands consists of a granular synthesizer that plays four different **Foley** sounds, all the generated through the <em>Granular Synthesis</em> technique. It also allows the user to manipulate their characteristics and to place them around the stereo spectrum.  
+Granulands consists of a granular synthesizer that plays four different **Foley** sounds, all the generated through the <em>Granular Synthesis</em> technique. It also allows the user to manipulate their characteristics and to place them around the stereo spectrum.
+A complete description of the development of the system can be found in the [report](https://github.com/polimi-cmls-22/group5-HW-SC-PLAS/blob/main/report1.pdf)
  
 
 ## Getting Started
@@ -45,21 +46,23 @@ In order to test and use the synthesizer:
   
 2. The master section allows to control the parameters of the master channel and all the sounds generated.
 
-  ![](./images/masterSection.PNG)
+   ![](./images/masterSection.PNG)
 
-  * The **PLAYALL** button allows to play all the sounds together and to stop some or all them if they are playing.
-  * ![](./images/playAllBTN.PNG)
+   * The **PLAYALL** button allows to play all the sounds together and to stop some or all them if they are playing.
+   * ![](./images/playAllBTN.PNG)
 
-  * The reverb controls allow the user to modify the parameters of the reverb effect applied to the master channel
-  * ![](./images/reverbSec.PNG)
-  * The Master Volume section allows to visualize the output level of the main signal
-  * ![](./images/masterVolume.PNG)
+   * The reverb controls allow the user to modify the parameters of the reverb effect applied to the master channel
+   * ![](./images/reverbSec.PNG)
+   * The Master Volume section allows to visualize the output level of the main signal
+   * ![](./images/masterVolume.PNG)
 
 3. The panner section is composed of two elements: 
    * A little panner view in the main window allows  to visualize the changes made on the sound spatial position, and allows to open the main panner window if clicked. 
    * ![](/images/littlePanner.PNG)
    * The main panner window allows the user to visualize the spatial position of the sounds and to move them inside the stereo spectrum by dragging them on the window.
    * ![](./images/Panner.png)
+
+4. The little button on the upper left corner allows the user to set some backgrounds to better visualize the type sounds playing
 
 ## Folder Structure
 
