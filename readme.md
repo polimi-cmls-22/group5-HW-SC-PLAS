@@ -45,15 +45,15 @@ In order to test and use the synthesizer:
   
 2. The master section allows to control the parameters of the master channel and all the sounds generated.
 
-  ![](./images/masterSection.PNG)
+   ![](./images/masterSection.PNG)
 
-  * The **PLAYALL** button allows to play all the sounds together and to stop some or all them if they are playing.
-  * ![](./images/playAllBTN.PNG)
+   * The **PLAYALL** button allows to play all the sounds together and to stop some or all them if they are playing.
+   * ![](./images/playAllBTN.PNG)
 
-  * The reverb controls allow the user to modify the parameters of the reverb effect applied to the master channel
-  * ![](./images/reverbSec.PNG)
-  * The Master Volume section allows to visualize the output level of the main signal
-  * ![](./images/masterVolume.PNG)
+   * The reverb controls allow the user to modify the parameters of the reverb effect applied to the master channel
+   * ![](./images/reverbSec.PNG)
+   * The Master Volume section allows to visualize the output level of the main signal
+   * ![](./images/masterVolume.PNG)
 
 3. The panner section is composed of two elements: 
    * A little panner view in the main window allows  to visualize the changes made on the sound spatial position, and allows to open the main panner window if clicked. 
