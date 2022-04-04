@@ -1,8 +1,3 @@
-s.boot;
-
-
-
-s.plotTree;
 (
 
 ~bufFire;
@@ -36,7 +31,7 @@ s.doWhenBooted(
 
 		winWidth = 900,
 		winHeight = 650,
-		winUpDown = 50,
+		winUpDown = 80,
 		winRL = 200,
 
 		panWinRL = 10,
@@ -411,47 +406,75 @@ s.doWhenBooted(
 
 		//SYNTHDEFS
 
-		SynthDef(\PassettiNeve, { |outBus, gate = 1, amp = 1, envbuf, hpfreq = 2000,speed = 1|
+		// ------STEPS------ //
+		SynthDef(\PassettiNeve, {
+			// Argument declaration
+			arg outBus,
+			gate = 1,
+			amp = 1,
+			envbuf,
+			hpfreq = 2000, // parameter that control the snow/dirt ratio
+			speed = 1; //speed of steps
+
+			// Variable declaration
 			var center,sig2,hpf,verb,shf,lpf, sig, a;
+
 			a = Buffer.readChannel(s,~srcPath,channels:[0]);
-			sig2 = GrainBuf.ar(1,Impulse.ar(speed+LFNoise1.ar((0.7*speed)).bipolar(speed/4)),0.4,a,1,0.34,2,0);
-			sig = sig2 * BrownNoise.ar(1,0);
-			verb = FreeVerb.ar(sig,0.2);
-			shf = PitchShift.ar(verb,0.2,0.2);
-			// center = Pan2.ar(shf,0,1);
+
+			// steps granular synth
+			sig2 = GrainBuf.ar(
+				numChannels: 1,
+				trigger: Impulse.ar(speed+LFNoise1.ar((0.7*speed)).bipolar(speed/4)),
+				dur: 0.4,
+				sndbuf: a,
+				rate: 1,
+				pos: 0.34,
+				interp: 2,
+				pan: 0
+			);
+
+			sig = sig2 * BrownNoise.ar(1,0); // multiply the signal by brown noise for crispiness
+			verb = FreeVerb.ar(sig,0.2); // reverbering the signal
+			shf = PitchShift.ar(verb,0.2,0.2); // pitch shifting the signal
+			// filtering signal
 			hpf = HPF.ar(shf,hpfreq);
 			lpf = LPF.ar(hpf,6000)*6;
-
+			// regulating output amplitude in order to maintain quasi-constant the volume
+			// though the frequency content raises
 			lpf = lpf*(hpfreq.log10-2000.log10).exp;
+
 			Out.ar(outBus,lpf);
 		}).add;
 
 
-
-
+		// ------FROGS & CRICKETS------ //
 		SynthDef(\frog, {
+			// Arguments declaration
 			arg outBus = 0,
-			grainPos = 0.162215,
-			randomness = 1, // 0.0 - 1.0
-			excited1 = 1,  // 0.5 - 1.7
-			excited2 = 1, // 0.5 - 1.7
-			ampFront = 1,
-			ampRear = 1;
+			grainPos = 0.162215, // position in % of buff duration of the beginning of the grain
+			randomness = 1, // 0.0 - 1.0, parameter that ragulates the irregularity of cries
+			excited1 = 1,  // 0.5 - 1.7, parameter that ragulates the crickets' cries speed
+			excited2 = 1.7, // 0.5 - 1.7, parameter that ragulates the frogs' cries speed
+			ampFront = 1, // amplitude of frogs signal-
+			ampRear = 1; // amplitude of crickets signal
 
-
+			// Variables declaration
 			var sig, sig2, mix, out,
 			envPitch,env, buff,
 			trig, trig2;
+
 			buff = Buffer.readChannel(s, ~srcPath, channels:[0]);
-			envPitch = EnvGen.kr(Env.perc(1, 3, curve:0));
-			env = EnvGen.kr(Env.perc(0.01, 3));
+
+			//trigger for frogs cries
 			trig = Trig1.ar((LFSaw.ar(0.3*excited2)+LFSaw.ar(1.2*excited2, 0, 0.25) + (LFNoise1.ar(randomness).range(-0.5, 2)*randomness)), 0.3);
+
+			// Frogs granular synth
 			sig = GrainBuf.ar(
 				numChannels: 1,
-				trigger: Impulse.ar(30 * trig ),
+				trigger: Impulse.ar(30 * trig ), // impulses train "opened" by trigger
 				dur: 0.01,
 				sndbuf: buff,
-				rate: 5 + EnvGen.kr(Env.asr(0.3, 1, 0.1), gate: trig),
+				rate: 5 + EnvGen.kr(Env.asr(0.3, 1, 0.1), gate: trig), //rate modulation via envelope
 				pos: grainPos,
 				interp: 2,
 				pan: 0,
@@ -461,7 +484,9 @@ s.doWhenBooted(
 				add: 0
 			)*excited2;
 
+			// trigger signal for crickets
 			trig2 = Trig1.ar(SinOsc.ar(80), 0.3);
+			// Crickets granular synth
 			sig2 = GrainBuf.ar(
 				numChannels: 1,
 				trigger: Impulse.ar(60 * LFPulse.ar((4*excited1) + LFNoise1.ar(1).bipolar(2), 0, 0.3, 0.5, 0.5)),
@@ -477,41 +502,46 @@ s.doWhenBooted(
 				add: 0
 			)*excited1;
 
+			// mixing signals to one single channel
 			mix = Mix([sig, sig2]);
+			// low pass filtering output signal
 			out = LPF.ar(mix, 1500, 0.3);
 
 			Out.ar(outBus, out);
 		}).add;
 
 
-
+		// ------WOLF------ //
 		SynthDef(\wolf, {
-			arg
-			outBus = 0,
-			length = 3.5,
+			// Argument declaration
+			arg outBus = 0,
+			length = 3.5, // parameter that regulate the howls' length
 			grainPos = 0.162215,
-			occurence = 0.2;
+			occurence = 0.2; // parameter that regulate the time occurrence of howls
 
+			// Variable declaration
 			var sig,
 			env, env1, envgen1,
 			lpf, trig,buff;
 
 			buff = Buffer.readChannel(s, ~srcPath, channels:[0]);
 
-			// trig = Trig1.ar(LFNoise1.kr(occurence*3), length+LFNoise1.kr(0.5).range(-1, 0));
+			// trigger signal for envelopes
 			trig = Trig1.ar(LFSaw.kr(occurence/2, 1), length + LFNoise1.kr(3).range(-2, 0));
 
+			// envelopes
 			env = EnvGen.kr(Env.adsr(1, 0.5, 1, 1.7, 0.8, \sin), trig, 1, 0.1);
 			env1 = Env.sine(3.5);
 			envgen1= EnvGen.kr(env1, trig);
 
-
+			// granular synth
+			// a great use of noise modulation has been done in order to achieve more natural result
 			sig = GrainBuf.ar(
 				numChannels: 1,
 				trigger: Impulse.ar(envgen1*50*SinOsc.kr(1/7).range(0.8, 1.1) + 350),
 				dur: 0.3,
 				sndbuf: buff,
-				rate: 0.2*env+LFNoise1.kr(4).bipolar(0.001),
+				rate: 0.2*env+LFNoise1.kr(4).bipolar(0.001), // rate modulation via envelope and noise
 				pos: grainPos,
 				interp: 2,
 				pan: 0,
@@ -519,76 +549,62 @@ s.doWhenBooted(
 				maxGrains: 512,
 				mul: 1,
 				add: 0
-			)*(0.8 + LFNoise1.kr(10).bipolar(0.1))*env;
+			)*(0.8 + LFNoise1.kr(10).bipolar(0.1))*env; // amplitude modulation via Noise and envelope
 
+			// low pass filtering output signal
 			lpf = LPF.ar(sig, 900)/2;
 
 			Out.ar(outBus, lpf);
 
 		}).add;
 
-
+		// ------FIRE------ //
 		SynthDef(\fire, {
+			// Argument declaration
 			arg	outBus = 0,
-			grainPos = 0.22,
-			wood = 1;
+			grainPos = 0.22, //
+			wood = 1; // parameter that aims to simulate the the quantity of burning wood
 
-			var sig1, sig2, sig3, sig4, mix, out,buff, trig;
+			// Variables declaration
+			var sig1, sig2, sig4,
+			mix, out,
+			buff, trig;
 
 			buff = Buffer.readChannel(s, ~srcPath, channels:[0]);
 
-			// High sparkles
+			// High sparkles granular synth
 			sig1 = GrainBuf.ar(
 				numChannels: 1,
-				trigger: Dust.ar((0.6*wood)+LFNoise1.ar(3).bipolar(0.2)),
+				trigger: Dust.ar((0.6*wood)+LFNoise1.ar(3).bipolar(0.2)), // grains are triggered by a random impulses train frequency modulated by wood parameter and noise
 				dur: 0.001,
 				sndbuf: buff,
-				rate: 3*SinOsc.ar(0.2).range(1,2),
+				rate: 3*SinOsc.ar(0.2).range(1,2), // rate modulation
 				pos: grainPos,
 				interp: 2,
 				pan: 0,
 				envbufnum: -1,
 				maxGrains: 512,
-				// mul: 10 + LFNoise1.ar(0.3).range(0,2) + (wood/100),
-				mul: 10*LFNoise1.ar(0.3).range(1,1.5) + (wood/100),
+				mul: 10*LFNoise1.ar(0.3).range(1,1.5) + (wood/100), // amplitude modulation via noise and wood parameter
 				add: 0
 			);
 
-			trig = Dust.ar(LFNoise1.ar(wood).range(1, 2));
-			// High sparkles 2
+			// Low sparkles granular synth
 			sig2 = GrainBuf.ar(
 				numChannels: 1,
-				// trigger: Impulse.ar((3*wood)+LFNoise1.ar(10).bipolar(1)),
-				trigger: trig,
+				trigger: Dust.ar(LFNoise1.ar(wood).range(1, 2)), // grains are triggered by a random impulses train frequency modulated by wood parameter and noise
 				dur: 0.002,
 				sndbuf: buff,
-				rate: 3*LFNoise1.ar(0.2).range(1,2),
+				rate: 3*LFNoise1.ar(0.2).range(1,2), // rate modulation
 				pos: 0.241694,
 				interp: 2,
 				pan: 0,
 				envbufnum: -1,
 				maxGrains: 512,
-				mul: LFNoise1.ar(0.3).range(1,2) + (wood/100),
+				mul: LFNoise1.ar(0.3).range(1,2) + (wood/100), // amp modulation
 				add: 0
 			);
 
-			// Low Sparkles
-			sig3 = GrainBuf.ar(
-				numChannels: 1,
-				trigger: Dust.ar(SinOsc.kr(0.5, 0, 0.5, 1) + LFNoise1.ar(0.3).bipolar(1)),
-				dur: 0.005+SinOsc.ar(0.1).bipolar(0.001),
-				sndbuf: buff,
-				rate: 0.7+SinOsc.ar(0.5).bipolar(0.1),
-				pos: grainPos,
-				interp: 2,
-				pan: 0,
-				envbufnum: -1,
-				maxGrains: 512,
-				mul: 2*SinOsc.ar(0.2, 0, 1, 1)+LFNoise1.ar(0.3).bipolar(1) + (wood/100),
-				add: 0
-			)*0.2;
-
-			// Noise
+			// Noise granular synth
 			sig4 = GrainBuf.ar(
 				numChannels: 1,
 				trigger: Dust.ar(20000+LFNoise1.ar(10).bipolar(1000)),
@@ -600,92 +616,67 @@ s.doWhenBooted(
 				pan: 0,
 				envbufnum: -1,
 				maxGrains: 512,
-				mul: (0.3 + SinOsc.ar(0.2+LFNoise1.ar(1).bipolar(0.1)).range(-0.05, 0))*0.1 + (wood/100),
+				mul: (0.3 + SinOsc.ar(0.2+LFNoise1.ar(1).bipolar(0.1)).range(-0.05, 0))*0.1 + (wood/100), //amp modulation
 				add: 0
-			)*LFNoise1.ar(wood).range(0.5, 1.5);
+			)*LFNoise1.ar(wood).range(0.5, 1.5); // amp modulation
 
-			sig3 = LPF.ar(sig4, 4000+SinOsc.ar(0.3).bipolar(50));
+			sig2 = FreeVerb.ar(sig2, 0.8, 0.3, 0); // reverb on low sparkles
 
-			sig2 = FreeVerb.ar(sig2, 0.8, 0.3, 0);
-
-			// mix = Mix([sig1, sig2, sig3, sig4]);
+			// mix all signals together
 			mix = Mix([sig1, sig2, sig4]);
-			// mix = sig2;
+
+			// filtering aout signal
 			out = LPF.ar(mix, 2000);
 			out = HPF.ar(out, 500);
+			//reverbering out signal
 			out = FreeVerb.ar(out, 0.1);
-			// out = Limiter.ar(out, 0.7);
+			// compression ratio 5:1 @ -6dB threshold, AT: 1ms, RT: 200ms
 			out = Compander.ar(out, out, (-6).dbamp, 1, 1/5, 0.001, 0.2);
 			Out.ar(outBus, out);
 		}).add;
 
+		// Stereo field positioner synth
 		SynthDef(\positioner,{
+			// Arguments declaration
 			arg inBus=0, mainOut=0, effectOut, angle = 0, radius = 0 ;
-			var val,valEf, input,effect, output, panMain,panEf, dbStart=20, inGain,efGain, dBatt;
 
-			// inGain = (0-radius*2).exp;
+			// Variables declaration
+			var val,valEf, input,effect, output, panMain,panEf, dbStart=20, inGain, efGain, dBatt;
+
+			// dB SPL attenuation due to distance from source
 			dBatt = 20 * (1/(radius.linlin(0,1,1,30))).log10;
-			//dBatt.postln;
-			inGain = dbStart+dBatt;
-			inGain = inGain.dbamp;
-			efGain = (0.1+(0.1*inGain));
-			// efGain = (0.2+(0.1*radius));//(((radius+0.5).log10)+0.1)*0.8;
-			// inGain = (1-((0.95*radius - 1)*5).exp);
-			input = In.ar(inBus,1); //(1-(radius-0.1));
-			val = input*inGain;
-			valEf = input*efGain; //*(efGain)*(inGain+0.1);
-			panMain = Pan2.ar(val,angle);
-			panEf = Pan2.ar(valEf,angle);
-			Out.ar(mainOut,panMain);
-			Out.ar(effectOut,panEf);
+			dBatt.postln;
+
+			inGain = dbStart+dBatt; // dry send gain in dB
+			efGain = (0.1+(0.1*inGain)); // effect send gain in dB
+
+			inGain = inGain.dbamp; // dry send gain in amplitude
+			efGain = efGain.dbamp; // effect send gain in amplitude
+
+			input = In.ar(inBus,1); // read signal from inBus
+
+			val = input*inGain; // dry send signal
+			valEf = input*efGain; // effect send signal
+
+			panMain = Pan2.ar(val,angle); // dry send signal panned
+			panEf = Pan2.ar(valEf,angle); // effect send signal panned
+
+			Out.ar(mainOut,panMain); // dry signal writing on dry bus
+			Out.ar(effectOut,panEf); // effect signal writing on effect bus
 		}).add;
 
+		// Environmental reverb synth
 		SynthDef(\roomer,{
+			// Argument declaration
 			arg inBus, outBus = 0, dimension=0.2, mix=1.0, amp=0, room=0.8, damp=0.3, radius;
+
+			// Variable declaration
 			var input, out,outputL,outputR,rev,yL,yR,zL,zR;
-			/*roomsize = 100,
-			revtime = 4.85,
-			damping = 0.5,
-			inputbw = 0.8,
-			spread = 10,
-			earlyreflevel = -25,
-			taillevel = -15+(amp/2),
-			maxroomsize = roomsize+1,*/
 
-
+			// input reading from inBus
 			input = In.ar(inBus,2);
-			/*outputL = GVerb.ar(
-			input[0],
-			roomsize:roomsize ,
-			revtime: revtime,
-			damping: damping,
-			inputbw: inputbw,
-			spread: spread,
-			drylevel: 0.dbamp,
-			earlyreflevel: earlyreflevel.dbamp,
-			taillevel: taillevel.dbamp,
-			/*maxroomsize: maxroomsize,*/
-			mul: 1,
-			add: 0
 
-			);
-			outputR = GVerb.ar(
-			input[1],
-			roomsize: roomsize,
-			revtime: revtime,
-			damping: damping,
-			inputbw: inputbw,
-			spread: spread,
-			drylevel: 0.dbamp,
-			earlyreflevel: earlyreflevel.dbamp,
-			taillevel: taillevel.dbamp,
-			/*maxroomsize: maxroomsize,*/
-			mul: 1,
-			add: 0
-
-			);
-			out = [outputL,outputR];*/
-
+			// Reverb
 			out = FreeVerb2.ar(
 				input[0],
 				input[1],
@@ -697,39 +688,51 @@ s.doWhenBooted(
 
 			);
 
+			// bandpass filtering out signal
 			out = BPF.ar(out, 3000)*(amp).dbamp;
 			Out.ar(outBus,out);
 		} ).add;
 
+		// Scope synth, it takes a signal and send it out to a buffer at audio rate to visualize the signal
 		SynthDef(\scoping,{
 			arg bus, buffy,outBus=0,amp=1;
 			var in;
 			in = In.ar(bus,1)*amp;
 			ScopeOut2.ar(in, buffy);
-			//Out.ar(outBus,In.ar(bus,1));
 		}).add;
 
 		SynthDef(\s1, {arg bus;
 			Out.ar(bus, SinOsc.ar(100,0.0,0.5))
-
 		}).add;
 
+		// Master monitor, takes audio from inBus and send out a control rate to visualize master level
 		SynthDef(\stereoMonitor,{
+			// Arguments declaration
 			arg inBus=0,krBus;
+
+			// Variable declaration
 			var input,ampL,ampR;
+
 			input =In.ar(inBus,2);
+
 			ampL = Amplitude.kr(input[0]);
 			ampR = Amplitude.kr(input[1]);// track the signal's amplitude
 			Out.kr(krBus, [ampL,ampR]);  // write amplitude data to control bus
 		}).add;
 
+		// Master channel
 		SynthDef(\stereoMaster,{
+			// Arguments declaration
 			arg inBus, outBus, amp = 10, ratio=4;
 
+			// Variable declaration
 			var in = In.ar(inBus,2);
+
+			// amplification of input
 			in = in*amp.dbamp;
-			//compression
+			// Compression ratio 4:1 @ -10dB threshold, AT: 10ms, RT: 50ms
 			in = Compander.ar(in, in, (-10).dbamp, 1, 1/ratio, 0.01, 0.05);
+			// Limiter, to avoid clipping
 			in = Limiter.ar(in, 0.8, 0.01);
 
 			Out.ar(outBus,in);
