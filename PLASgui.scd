@@ -935,7 +935,7 @@ s.doWhenBooted(
 		});
 
 		~knobLabelOcc = StaticText(w2, Rect(12*knobIntraDist,1.1*marg,1.5*knobLabelWidth,20))
-		.string_("Occurrance")
+		.string_("Occurrence")
 		.align_(\center)
 		.font_(Font("arial", 12).boldVariant)
 		.stringColor_(Color.white);
