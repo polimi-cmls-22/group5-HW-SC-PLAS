@@ -120,290 +120,6 @@ s.doWhenBooted(
 		~knobPos[2,6] = Color.green;
 		~knobPos[3,6] = Color.black;
 
-		Window.closeAll;
-		// main
-		w = Window.new("PLASgui",Rect(winRL,winUpDown,winWidth,winHeight), false)
-		.front
-		.alwaysOnTop_(false)
-		.onClose_({
-			Window.closeAll;
-			s.freeAll;
-			~bufWolf.free;
-			~bufFire.free;
-			~bufStep.free;
-			~bufFrog.free;
-			~fireBus.free;
-			~wolfBus.free;
-			~frogBus.free;
-			~stepBus.free;
-			~updateIndicator.stop;
-			"SYSTEM STOPPED...".postln;
-		})
-		/*.acceptsMouseOver_(true)
-		.mouseOverAction_({
-		if((x>=5 && x<=20),{
-		if((y>=5 && y<=20),{
-		~info=true;
-		},
-		{~info=false;}
-		)
-		});
-		w.refresh;
-		})*/
-		//.background_(Color.rand)
-		.drawFunc = {
-
-
-			Pen.addRect(w.view.bounds);
-			Pen.fillAxialGradient(w.view.bounds.leftTop, w.view.bounds.rightBottom, Color.fromHexString("#05668d"), Color.fromHexString("#028090"));
-
-
-			Pen.perform([\stroke, \fill].choose);
-
-			Pen.addRect(Rect(marg,marg,sectWinWidth,sectWinHeight))
-			.width_(5)
-			//.fillColor_(Color.black)
-			//.fill
-			.strokeColor_(Color.fromHexString("#78cdd7"))
-			.stroke;
-
-			Pen.addRect(Rect(marg,(2*marg)+sectWinHeight,sectWinWidth,sectWinHeight))
-			.width_(5)
-			.strokeColor_(Color.fromHexString("#78cdd7"))
-			.stroke;
-
-			Pen.addRect(Rect(marg,(3*marg)+(2*sectWinHeight),sectWinWidth,sectWinHeight))
-			.width_(5)
-			.strokeColor_(Color.fromHexString("#78cdd7"))
-			.stroke;
-
-			Pen.addRect(Rect(marg,(4*marg)+(3*sectWinHeight),sectWinWidth,sectWinHeight))
-			.width_(5)
-			.strokeColor_(Color.fromHexString("#78cdd7"))
-			.stroke;
-
-			Pen.addRect(Rect(750,marg,sectWinHeight,winHeight-(3*marg)-sectWinHeight))
-			.width_(5)
-			.strokeColor_(Color.fromHexString("#78cdd7"))
-			.stroke;
-
-			Pen.addRect(Rect(750,(4*marg)+(3*sectWinHeight),sectWinHeight,sectWinHeight))
-			.width_(5)
-			.strokeColor_(Color.fromHexString("#78cdd7"))
-			.stroke;
-
-			if(~background == true,{
-				i1.tileInRect(Rect(marg,marg,sectWinWidth,sectWinHeight),nil,2,1.0);
-				i2.tileInRect(Rect(marg,(2*marg)+sectWinHeight,sectWinWidth,sectWinHeight),nil,2,0.7);
-				i3.tileInRect(Rect(marg,(3*marg)+(2*sectWinHeight),sectWinWidth,sectWinHeight),nil,2,1.0);
-				i4.tileInRect(Rect(marg,(4*marg)+(3*sectWinHeight),sectWinWidth,sectWinHeight),nil,2,1.0);
-			},
-			{});
-
-
-			Pen.addRect(Rect(300,60, 150, 60))
-			.width_(8)
-			.strokeColor_(Color.fromHexString("#78cdd7"))
-			.stroke;
-
-			Pen.addRect(Rect(300,216, 150, 60))
-			.width_(8)
-			.strokeColor_(Color.fromHexString("#78cdd7"))
-			.stroke;
-
-			Pen.addRect(Rect(300,373, 150, 60))
-			.width_(8)
-			.strokeColor_(Color.fromHexString("#78cdd7"))
-			.stroke;
-
-			Pen.addRect(Rect(300,529, 150, 60))
-			.width_(8)
-			.strokeColor_(Color.fromHexString("#78cdd7"))
-			.stroke;
-
-		};
-
-		/*if(~info,{
-		StaticText(w, Rect(20,5,30,30))
-		.string_("sfondi")
-		.align_(\center)
-		.font_(Font("arial"/*"Eras Bold ITC""Cooper Black""Eras Bold ITC""Harlow Solid Italic""Matura MT Script Capitals""Swis721 BlkEx BT"*/, 15).boldVariant)
-		.stringColor_(Color.black)
-		.background_(Color.white)
-		});*/
-
-
-		Button.new(w, Rect(5,5,15,15))
-		.states_([
-			["", Color.black, Color.fromHexString("#78cdd7")],
-			["",Color.white, Color.white(1.0)]
-		]).action_({ |b| QtGUI.palette = if(b.value == 0);
-			if(b.value==0,{
-				~background = false;
-				w.refresh;
-			},{
-				~background = true;
-				w.refresh;
-		});});
-
-
-		/*
-
-
-		Button.new(w, Rect(winWidth-20,5,15,15))
-		.states_([
-		["", Color.black, Color.fromHexString("#78cdd7")],
-		["",Color.white, Color.white(1.0)]
-		])
-		.action_({|panner|
-		if(panner.value==1,{
-
-		wp.visible = true;
-
-		},{wp.visible=false})
-		});
-
-		Button.new(w, Rect(winWidth-20,winHeight-20,15,15))
-		.states_([
-		["", Color.black, Color.fromHexString("#78cdd7")],
-		["",Color.white, Color.white(1.0)]
-		]);
-
-		Button.new(w, Rect(5,winHeight-20,15,15))
-		.states_([
-		["", Color.black, Color.fromHexString("#78cdd7")],
-		["",Color.white, Color.white(1.0)]
-		]);
-		*/
-
-
-
-		// sections----------------------------------------------------
-
-		w1 = CompositeView(w,Rect(marg,marg,sectWinWidth,sectWinHeight));
-		//.background_(Color.new255(30,144,255));
-
-		w2 = CompositeView(w,Rect(marg,(2*marg)+sectWinHeight,sectWinWidth,sectWinHeight));
-		//.background_(Color.new255(30,144,255));
-
-		w3 = CompositeView(w,Rect(marg,(3*marg)+(2*sectWinHeight),sectWinWidth,sectWinHeight));
-		//.background_(Color.new255(30,144,255));
-
-		w4 = CompositeView(w,Rect(marg,(4*marg)+(3*sectWinHeight),sectWinWidth,sectWinHeight));
-		//.background_(Color.new255(30,144,255));
-
-		w5 = CompositeView(w,Rect(750,marg,sectWinHeight,winHeight-(2*marg)));
-		//.background_(Color.white);
-
-		w6 = CompositeView(w,Rect(750,(4*marg)+(3*sectWinHeight),sectWinHeight,sectWinHeight));
-		v6 = UserView(w,Rect(750,(4*marg)+(3*sectWinHeight),sectWinHeight,sectWinHeight));
-		v6.drawFunc_({
-			var myX,myY;
-			var radius = (sectWinHeight/2)-3;
-			Pen.addRect(Rect(0,0,sectWinHeight,sectWinHeight))
-			.fillRadialGradient(((sectWinHeight/2))@((sectWinHeight)),(sectWinHeight/2)@(sectWinHeight),30,200,
-				Color.fromHexString("#05668d"), Color.fromHexString("#78cdd7"))
-			.stroke
-			.addArc(((sectWinHeight/2))@((sectWinHeight)),5,pi,2pi)
-			.color_(Color.white)
-			.fill;
-
-			Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius,pi,2pi)
-			.strokeColor_(Color.white)
-			.alpha_(0.5)
-			.stroke;
-
-			Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius/4*3,pi,2pi)
-			.strokeColor_(Color.white)
-			.alpha_(0.4)
-			.stroke;
-
-
-			Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius/2,pi,2pi)
-			.strokeColor_(Color.white)
-			.alpha_(0.3)
-			.stroke;
-
-			Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius/4,pi,2pi)
-			.strokeColor_(Color.white)
-			.alpha_(0.2)
-			.stroke
-			.alpha_(1);
-			//~knobPos[0,0].postln;
-			for(0,numOfPoints-1,{
-				arg i;
-				//~knobPos[i,0].postln;
-				//"qui".postln;
-
-				myX=(((~knobPos[i,0])/(width-10))*(sectWinHeight-3));
-				//"quo".postln;
-				myY=(((~knobPos[i,1]/(height-10))*((sectWinHeight/2)-3))+(sectWinHeight/2));
-				//"qua".postln;
-				Pen.color_(~knobPos[i,6]);
-				Pen.addArc((myX)@(myY),5,0,2pi);
-				Pen.fillStroke;
-			})
-
-		});
-
-		v6.mouseDownAction = {
-			arg view, x,y, m;
-			//var vis;
-			// if(~wpBool==false,{
-			/*if(~wp.isClosed==true,{
-			~wpFunc.play;
-			// ~wp.visible_(true);
-			},{
-			if(~wp.visible == true, {
-			~wp.visible=false
-			},{
-			~wp.visible=true
-
-			});
-
-			});*/
-			if(~wpBool==false,
-				{
-					~wpFunc.value;
-					~wp.visible_(true);
-					~wpBool = true;
-				},
-				{
-					~wp.close;
-					~wpBool = false;
-				}
-			)
-
-		};
-
-
-
-		//scope%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-		~bufFire = Buffer.alloc(s, 1024, 1);
-		~scopefire = ScopeView(w1, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
-		~scopefire.bufnum = ~bufFire.bufnum;
-		~scopefire.server_(s);
-		~scopefire.start;
-
-		~bufWolf = Buffer.alloc(s, 1024, 1);
-		~scopewolf = ScopeView(w2, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
-		~scopewolf.bufnum = ~bufWolf.bufnum;
-		~scopewolf.server_(s);
-		~scopewolf.start;
-
-		~bufFrog = Buffer.alloc(s, 1024, 1);
-		~scopefrog = ScopeView(w3, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
-		~scopefrog.bufnum = ~bufFrog.bufnum;
-		~scopefrog.server_(s);
-		~scopefrog.start;
-
-		~bufStep = Buffer.alloc(s, 1024, 1);
-		~scopestep = ScopeView(w4, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
-		~scopestep.bufnum = ~bufStep.bufnum;
-		~scopestep.server_(s);
-		~scopestep.start;
-
 		//SYNTHDEFS
 
 		// ------STEPS------ //
@@ -464,7 +180,7 @@ s.doWhenBooted(
 			trig, trig2;
 
 			buff = Buffer.readChannel(s, ~srcPath, channels:[0]);
-
+			0.1.wait;
 			//trigger for frogs cries
 			trig = Trig1.ar((LFSaw.ar(0.3*excited2)+LFSaw.ar(1.2*excited2, 0, 0.25) + (LFNoise1.ar(randomness).range(-0.5, 2)*randomness)), 0.3);
 
@@ -737,6 +453,248 @@ s.doWhenBooted(
 
 			Out.ar(outBus,in);
 		}).add;
+
+		0.2.wait;
+
+		Window.closeAll;
+		// main
+		w = Window.new("PLASgui",Rect(winRL,winUpDown,winWidth,winHeight), false)
+		.front
+		.alwaysOnTop_(false)
+		.onClose_({
+			Window.closeAll;
+			s.freeAll;
+			~bufWolf.free;
+			~bufFire.free;
+			~bufStep.free;
+			~bufFrog.free;
+			~fireBus.free;
+			~wolfBus.free;
+			~frogBus.free;
+			~stepBus.free;
+			~updateIndicator.stop;
+			"SYSTEM STOPPED...".postln;
+		}).drawFunc = {
+
+
+			Pen.addRect(w.view.bounds);
+			Pen.fillAxialGradient(w.view.bounds.leftTop, w.view.bounds.rightBottom, Color.fromHexString("#05668d"), Color.fromHexString("#028090"));
+
+
+			Pen.perform([\stroke, \fill].choose);
+
+			Pen.addRect(Rect(marg,marg,sectWinWidth,sectWinHeight))
+			.width_(5)
+			//.fillColor_(Color.black)
+			//.fill
+			.strokeColor_(Color.fromHexString("#78cdd7"))
+			.stroke;
+
+			Pen.addRect(Rect(marg,(2*marg)+sectWinHeight,sectWinWidth,sectWinHeight))
+			.width_(5)
+			.strokeColor_(Color.fromHexString("#78cdd7"))
+			.stroke;
+
+			Pen.addRect(Rect(marg,(3*marg)+(2*sectWinHeight),sectWinWidth,sectWinHeight))
+			.width_(5)
+			.strokeColor_(Color.fromHexString("#78cdd7"))
+			.stroke;
+
+			Pen.addRect(Rect(marg,(4*marg)+(3*sectWinHeight),sectWinWidth,sectWinHeight))
+			.width_(5)
+			.strokeColor_(Color.fromHexString("#78cdd7"))
+			.stroke;
+
+			Pen.addRect(Rect(750,marg,sectWinHeight,winHeight-(3*marg)-sectWinHeight))
+			.width_(5)
+			.strokeColor_(Color.fromHexString("#78cdd7"))
+			.stroke;
+
+			Pen.addRect(Rect(750,(4*marg)+(3*sectWinHeight),sectWinHeight,sectWinHeight))
+			.width_(5)
+			.strokeColor_(Color.fromHexString("#78cdd7"))
+			.stroke;
+
+			if(~background == true,{
+				i1.tileInRect(Rect(marg,marg,sectWinWidth,sectWinHeight),nil,2,1.0);
+				i2.tileInRect(Rect(marg,(2*marg)+sectWinHeight,sectWinWidth,sectWinHeight),nil,2,0.7);
+				i3.tileInRect(Rect(marg,(3*marg)+(2*sectWinHeight),sectWinWidth,sectWinHeight),nil,2,1.0);
+				i4.tileInRect(Rect(marg,(4*marg)+(3*sectWinHeight),sectWinWidth,sectWinHeight),nil,2,1.0);
+			},
+			{});
+
+
+			Pen.addRect(Rect(300,60, 150, 60))
+			.width_(8)
+			.strokeColor_(Color.fromHexString("#78cdd7"))
+			.stroke;
+
+			Pen.addRect(Rect(300,216, 150, 60))
+			.width_(8)
+			.strokeColor_(Color.fromHexString("#78cdd7"))
+			.stroke;
+
+			Pen.addRect(Rect(300,373, 150, 60))
+			.width_(8)
+			.strokeColor_(Color.fromHexString("#78cdd7"))
+			.stroke;
+
+			Pen.addRect(Rect(300,529, 150, 60))
+			.width_(8)
+			.strokeColor_(Color.fromHexString("#78cdd7"))
+			.stroke;
+
+		};
+
+
+		Button.new(w, Rect(5,5,15,15))
+		.states_([
+			["", Color.black, Color.fromHexString("#78cdd7")],
+			["",Color.white, Color.white(1.0)]
+		]).action_({ |b| QtGUI.palette = if(b.value == 0);
+			if(b.value==0,{
+				~background = false;
+				w.refresh;
+			},{
+				~background = true;
+				w.refresh;
+		});});
+
+
+		/*
+
+
+		Button.new(w, Rect(winWidth-20,5,15,15))
+		.states_([
+		["", Color.black, Color.fromHexString("#78cdd7")],
+		["",Color.white, Color.white(1.0)]
+		])
+		.action_({|panner|
+		if(panner.value==1,{
+
+		wp.visible = true;
+
+		},{wp.visible=false})
+		});
+
+		Button.new(w, Rect(winWidth-20,winHeight-20,15,15))
+		.states_([
+		["", Color.black, Color.fromHexString("#78cdd7")],
+		["",Color.white, Color.white(1.0)]
+		]);
+
+		Button.new(w, Rect(5,winHeight-20,15,15))
+		.states_([
+		["", Color.black, Color.fromHexString("#78cdd7")],
+		["",Color.white, Color.white(1.0)]
+		]);
+		*/
+
+
+
+		// sections----------------------------------------------------
+
+		w1 = CompositeView(w,Rect(marg,marg,sectWinWidth,sectWinHeight));
+		//.background_(Color.new255(30,144,255));
+
+		w2 = CompositeView(w,Rect(marg,(2*marg)+sectWinHeight,sectWinWidth,sectWinHeight));
+		//.background_(Color.new255(30,144,255));
+
+		w3 = CompositeView(w,Rect(marg,(3*marg)+(2*sectWinHeight),sectWinWidth,sectWinHeight));
+		//.background_(Color.new255(30,144,255));
+
+		w4 = CompositeView(w,Rect(marg,(4*marg)+(3*sectWinHeight),sectWinWidth,sectWinHeight));
+		//.background_(Color.new255(30,144,255));
+
+		w5 = CompositeView(w,Rect(750,marg,sectWinHeight,winHeight-(2*marg)));
+		//.background_(Color.white);
+
+		w6 = CompositeView(w,Rect(750,(4*marg)+(3*sectWinHeight),sectWinHeight,sectWinHeight));
+		v6 = UserView(w,Rect(750,(4*marg)+(3*sectWinHeight),sectWinHeight,sectWinHeight));
+		v6.drawFunc_({
+			var myX,myY;
+			var radius = (sectWinHeight/2)-3;
+			Pen.addRect(Rect(0,0,sectWinHeight,sectWinHeight))
+			.fillRadialGradient(((sectWinHeight/2))@((sectWinHeight)),(sectWinHeight/2)@(sectWinHeight),30,200,
+				Color.fromHexString("#05668d"), Color.fromHexString("#78cdd7"))
+			.stroke
+			.addArc(((sectWinHeight/2))@((sectWinHeight)),5,pi,2pi)
+			.color_(Color.white)
+			.fill;
+
+			Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius,pi,2pi)
+			.strokeColor_(Color.white)
+			.alpha_(0.5)
+			.stroke;
+
+			Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius/4*3,pi,2pi)
+			.strokeColor_(Color.white)
+			.alpha_(0.4)
+			.stroke;
+
+
+			Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius/2,pi,2pi)
+			.strokeColor_(Color.white)
+			.alpha_(0.3)
+			.stroke;
+
+			Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius/4,pi,2pi)
+			.strokeColor_(Color.white)
+			.alpha_(0.2)
+			.stroke
+			.alpha_(1);
+			//~knobPos[0,0].postln;
+			for(0,numOfPoints-1,{
+				arg i;
+				//~knobPos[i,0].postln;
+				//"qui".postln;
+
+				myX=(((~knobPos[i,0])/(width-10))*(sectWinHeight-3));
+				//"quo".postln;
+				myY=(((~knobPos[i,1]/(height-10))*((sectWinHeight/2)-3))+(sectWinHeight/2));
+				//"qua".postln;
+				Pen.color_(~knobPos[i,6]);
+				Pen.addArc((myX)@(myY),5,0,2pi);
+				Pen.fillStroke;
+			})
+
+		});
+
+		v6.mouseDownAction = {
+			arg view, x,y, m;
+			//var vis;
+			// if(~wpBool==false,{
+			/*if(~wp.isClosed==true,{
+			~wpFunc.play;
+			// ~wp.visible_(true);
+			},{
+			if(~wp.visible == true, {
+			~wp.visible=false
+			},{
+			~wp.visible=true
+
+			});
+
+			});*/
+			if(~wpBool==false,
+				{
+					~wpFunc.value;
+					~wp.visible_(true);
+					~wpBool = true;
+				},
+				{
+					~wp.close;
+					~wpBool = false;
+				}
+			)
+
+		};
+
+
+
+
+
+
 		// LABEL%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 		~labeltitle = StaticText(w, Rect((sectWinWidth/2)-(150/2),15,200,titleHeight+4))
@@ -1551,7 +1509,31 @@ s.doWhenBooted(
 			}
 		};}.defer(0.5);
 
+		//scope%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+		~bufFire = Buffer.alloc(s, 1024, 1);
+		~scopefire = ScopeView(w1, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
+		~scopefire.bufnum = ~bufFire.bufnum;
+		~scopefire.server_(s);
+		~scopefire.start;
+
+		~bufWolf = Buffer.alloc(s, 1024, 1);
+		~scopewolf = ScopeView(w2, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
+		~scopewolf.bufnum = ~bufWolf.bufnum;
+		~scopewolf.server_(s);
+		~scopewolf.start;
+
+		~bufFrog = Buffer.alloc(s, 1024, 1);
+		~scopefrog = ScopeView(w3, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
+		~scopefrog.bufnum = ~bufFrog.bufnum;
+		~scopefrog.server_(s);
+		~scopefrog.start;
+
+		~bufStep = Buffer.alloc(s, 1024, 1);
+		~scopestep = ScopeView(w4, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
+		~scopestep.bufnum = ~bufStep.bufnum;
+		~scopestep.server_(s);
+		~scopestep.start;
 
 
 
