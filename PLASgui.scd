@@ -129,7 +129,7 @@ s.doWhenBooted(
 			gate = 1,
 			amp = 1,
 			envbuf,
-			hpfreq = 2000, // parameter that control the snow/dirt ratio
+			hpfreq = 2000, // parameter that control the snow/dirt ratiogr
 			speed = 1; //speed of steps
 
 			// Variable declaration
@@ -558,1122 +558,1137 @@ s.doWhenBooted(
 			},{
 				~background = true;
 				w.refresh;
-		});});
+
+	});});
 
 
-		/*
+	/*
 
 
-		Button.new(w, Rect(winWidth-20,5,15,15))
-		.states_([
-		["", Color.black, Color.fromHexString("#78cdd7")],
-		["",Color.white, Color.white(1.0)]
-		])
-		.action_({|panner|
-		if(panner.value==1,{
+	Button.new(w, Rect(winWidth-20,5,15,15))
+	.states_([
+	["", Color.black, Color.fromHexString("#78cdd7")],
+	["",Color.white, Color.white(1.0)]
+	])
+	.action_({|panner|
+	if(panner.value==1,{
 
-		wp.visible = true;
+	wp.visible = true;
 
-		},{wp.visible=false})
+	},{wp.visible=false})
+	});
+
+	Button.new(w, Rect(winWidth-20,winHeight-20,15,15))
+	.states_([
+	["", Color.black, Color.fromHexString("#78cdd7")],
+	["",Color.white, Color.white(1.0)]
+	]);
+
+	Button.new(w, Rect(5,winHeight-20,15,15))
+	.states_([
+	["", Color.black, Color.fromHexString("#78cdd7")],
+	["",Color.white, Color.white(1.0)]
+	]);
+	*/
+
+
+
+	// sections----------------------------------------------------
+
+	w1 = CompositeView(w,Rect(marg,marg,sectWinWidth,sectWinHeight));
+	//.background_(Color.new255(30,144,255));
+
+	w2 = CompositeView(w,Rect(marg,(2*marg)+sectWinHeight,sectWinWidth,sectWinHeight));
+	//.background_(Color.new255(30,144,255));
+
+	w3 = CompositeView(w,Rect(marg,(3*marg)+(2*sectWinHeight),sectWinWidth,sectWinHeight));
+	//.background_(Color.new255(30,144,255));
+
+	w4 = CompositeView(w,Rect(marg,(4*marg)+(3*sectWinHeight),sectWinWidth,sectWinHeight));
+	//.background_(Color.new255(30,144,255));
+
+	w5 = CompositeView(w,Rect(750,marg,sectWinHeight,winHeight-(2*marg)));
+	//.background_(Color.white);
+
+	w6 = CompositeView(w,Rect(750,(4*marg)+(3*sectWinHeight),sectWinHeight,sectWinHeight));
+	v6 = UserView(w,Rect(750,(4*marg)+(3*sectWinHeight),sectWinHeight,sectWinHeight));
+	v6.drawFunc_({
+		var myX,myY;
+		var radius = (sectWinHeight/2)-3;
+		Pen.addRect(Rect(0,0,sectWinHeight,sectWinHeight))
+		.fillRadialGradient(((sectWinHeight/2))@((sectWinHeight)),(sectWinHeight/2)@(sectWinHeight),30,200,
+			Color.fromHexString("#05668d"), Color.fromHexString("#78cdd7"))
+		.stroke
+		.addArc(((sectWinHeight/2))@((sectWinHeight)),5,pi,2pi)
+		.color_(Color.white)
+		.fill;
+
+		Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius,pi,2pi)
+		.strokeColor_(Color.white)
+		.alpha_(0.5)
+		.stroke;
+
+		Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius/4*3,pi,2pi)
+		.strokeColor_(Color.white)
+		.alpha_(0.4)
+		.stroke;
+
+
+		Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius/2,pi,2pi)
+		.strokeColor_(Color.white)
+		.alpha_(0.3)
+		.stroke;
+
+		Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius/4,pi,2pi)
+		.strokeColor_(Color.white)
+		.alpha_(0.2)
+		.stroke
+		.alpha_(1);
+		//~knobPos[0,0].postln;
+		for(0,numOfPoints-1,{
+			arg i;
+			//~knobPos[i,0].postln;
+			//"qui".postln;
+
+			myX=(((~knobPos[i,0])/(width-10))*(sectWinHeight-3));
+			//"quo".postln;
+			myY=(((~knobPos[i,1]/(height-10))*((sectWinHeight/2)-3))+(sectWinHeight/2));
+			//"qua".postln;
+			Pen.color_(~knobPos[i,6]);
+			Pen.addArc((myX)@(myY),5,0,2pi);
+			Pen.fillStroke;
+		})
+
+	});
+
+	v6.mouseDownAction = {
+		arg view, x,y, m;
+		//var vis;
+		// if(~wpBool==false,{
+		/*if(~wp.isClosed==true,{
+		~wpFunc.play;
+		// ~wp.visible_(true);
+		},{
+		if(~wp.visible == true, {
+		~wp.visible=false
+		},{
+		~wp.visible=true
+
 		});
 
-		Button.new(w, Rect(winWidth-20,winHeight-20,15,15))
-		.states_([
-		["", Color.black, Color.fromHexString("#78cdd7")],
-		["",Color.white, Color.white(1.0)]
-		]);
+		});*/
+		if(~wpBool==false,
+			{
+				~wpFunc.value;
+				~wp.visible_(true);
+				~wpBool = true;
+			},
+			{
+				~wp.close;
+				~wpBool = false;
+			}
+		)
 
-		Button.new(w, Rect(5,winHeight-20,15,15))
-		.states_([
-		["", Color.black, Color.fromHexString("#78cdd7")],
-		["",Color.white, Color.white(1.0)]
-		]);
-		*/
-
-
-
-		// sections----------------------------------------------------
-
-		w1 = CompositeView(w,Rect(marg,marg,sectWinWidth,sectWinHeight));
-		//.background_(Color.new255(30,144,255));
-
-		w2 = CompositeView(w,Rect(marg,(2*marg)+sectWinHeight,sectWinWidth,sectWinHeight));
-		//.background_(Color.new255(30,144,255));
-
-		w3 = CompositeView(w,Rect(marg,(3*marg)+(2*sectWinHeight),sectWinWidth,sectWinHeight));
-		//.background_(Color.new255(30,144,255));
-
-		w4 = CompositeView(w,Rect(marg,(4*marg)+(3*sectWinHeight),sectWinWidth,sectWinHeight));
-		//.background_(Color.new255(30,144,255));
-
-		w5 = CompositeView(w,Rect(750,marg,sectWinHeight,winHeight-(2*marg)));
-		//.background_(Color.white);
-
-		w6 = CompositeView(w,Rect(750,(4*marg)+(3*sectWinHeight),sectWinHeight,sectWinHeight));
-		v6 = UserView(w,Rect(750,(4*marg)+(3*sectWinHeight),sectWinHeight,sectWinHeight));
-		v6.drawFunc_({
-			var myX,myY;
-			var radius = (sectWinHeight/2)-3;
-			Pen.addRect(Rect(0,0,sectWinHeight,sectWinHeight))
-			.fillRadialGradient(((sectWinHeight/2))@((sectWinHeight)),(sectWinHeight/2)@(sectWinHeight),30,200,
-				Color.fromHexString("#05668d"), Color.fromHexString("#78cdd7"))
-			.stroke
-			.addArc(((sectWinHeight/2))@((sectWinHeight)),5,pi,2pi)
-			.color_(Color.white)
-			.fill;
-
-			Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius,pi,2pi)
-			.strokeColor_(Color.white)
-			.alpha_(0.5)
-			.stroke;
-
-			Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius/4*3,pi,2pi)
-			.strokeColor_(Color.white)
-			.alpha_(0.4)
-			.stroke;
+	};
 
 
-			Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius/2,pi,2pi)
-			.strokeColor_(Color.white)
-			.alpha_(0.3)
-			.stroke;
 
-			Pen.addArc(((sectWinHeight/2))@((sectWinHeight)),radius/4,pi,2pi)
-			.strokeColor_(Color.white)
-			.alpha_(0.2)
-			.stroke
-			.alpha_(1);
-			//~knobPos[0,0].postln;
-			for(0,numOfPoints-1,{
-				arg i;
-				//~knobPos[i,0].postln;
-				//"qui".postln;
 
-				myX=(((~knobPos[i,0])/(width-10))*(sectWinHeight-3));
-				//"quo".postln;
-				myY=(((~knobPos[i,1]/(height-10))*((sectWinHeight/2)-3))+(sectWinHeight/2));
-				//"qua".postln;
-				Pen.color_(~knobPos[i,6]);
-				Pen.addArc((myX)@(myY),5,0,2pi);
-				Pen.fillStroke;
-			})
 
+
+	// LABEL%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	~labeltitle = StaticText(w, Rect((sectWinWidth/2)-(150/2),15,200,titleHeight+4))
+	.string_("GRANULANDS")
+	.align_(\center)
+	.font_(Font("Helvetica"/*"Cooper Black""Eras Bold ITC""Harlow Solid Italic""Matura MT Script Capitals""Swis721 BlkEx BT"*/, 20).boldVariant)
+	.stringColor_(Color.black)
+	.background_(Color.white);
+
+	//FIRE%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	~fireBus = Bus.audio(s,1);
+	~fireSynth = Synth.newPaused(\fire,[\outBus,~fireBus]);
+
+	~labelFire = StaticText.new(w1, Rect(20,0,titleWidth,titleHeight))
+	.string_("FIRE")
+	.align_(\center)
+	.font_(Font("Helvetica", 18).boldVariant)
+	.stringColor_(Color.black)
+	.background_(Color.white);
+
+	~knobLabelWood= StaticText(w1, Rect(3*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Wood")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	~knobWood = Knob(w1, Rect(3*knobIntraDist,50,knobDim,knobDim))
+	.value_(1/3)
+	.background_(Color.fromHexString("#78cdd7"))
+	.color_(~colors)
+	.mode_(\vert)
+	.action_({
+		arg wood;
+		~numberboxWood.value_(wood.value.linlin(0,1,0.5,2));
+		~fireSynth.set(\wood,~knobWood.value.linlin(0,1,0.5,2))
+	});
+
+	~numberboxWood = NumberBox(w1, Rect(3*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
+	.value_(1)
+	.normalColor_(Color.black)
+	.background_(Color.white)
+	.align_(\center)
+	.action_({
+		arg wood;
+		~knobWood.valueAction_(wood.value.linlin(0.5,2,0,1));
+	});
+
+	~knobLabelPanFire= StaticText(w1, Rect(36*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Pan")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	/*~knobPanFire*/ ~knobPos[0,2] = Knob(w1, Rect(36*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.centered_(true)
+	.value_(0.5)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_(
+		{
+			var angle,distance,x,y;
+			angle = ~knobPos[0,2].value.linlin(0,1,-pi/2,pi/2);
+			distance = ~knobPos[0,3].value.linlin(0,1,0,height-10);
+			x = (((distance*((angle).sin))+centerPosX)+elRadius);
+			y = ((((height-10)-(distance*(angle).cos)))+elRadius);
+			~knobPos[0,0] = x;
+			~knobPos[0,1] = y;
+			~knobPos[0,5].set(\angle,~knobPos[0,2].value.linlin(0,1,-1,1));
+			~knobPos[0,5].set(\radius,~knobPos[0,3].value);
+			v.refresh;
+			v6.refresh;
+	});
+
+	~knobLabelDistFire= StaticText(w1, Rect(42*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Distance")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	/*~knobDistFire*/ ~knobPos[0,3] = Knob(w1, Rect(42*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.value_(0.2)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_(
+		{
+			var angle,distance,x,y;
+			angle = ~knobPos[0,2].value.linlin(0,1,-pi/2,pi/2);
+			distance = ~knobPos[0,3].value.linlin(0,1,20,height-10);
+			x = (((distance*((angle).sin))+centerPosX)+elRadius);
+			y = ((((height-10)-(distance*(angle).cos)))+elRadius);
+			~knobPos[0,0] = x;
+			~knobPos[0,1] = y;
+			~knobPos[0,5].set(\angle,~knobPos[0,2].value.linlin(0,1,-1,1));
+			~knobPos[0,5].set(\radius,~knobPos[0,3].value);
+			v.refresh;
+			v6.refresh;
+	});
+	//"passed1?".postln;
+	~b1 = Button.new(w1, Rect(48*knobIntraDist,40,60,knobDim))
+	.states_([
+		["PLAY", Color.black, Color.fromHexString("#78cdd7")],
+		["STOP",Color.white, Color.red(0.5)]
+	])
+	.action_({ arg b,sum;
+		QtGUI.palette = if(b.value == 0);
+		//"aqi".postln;
+		if(b.value == 0,
+			{
+				~fireSynth.run(false);
+				//postln("firesynth true");
+
+			},
+			{
+				~fireSynth.run(true);
+				//postln("firesynth false");
+
+			}
+		);
+		sum = ~b1.value+~b2.value+~b3.value+~b4.value;
+		if(sum>0, {
+			~b5.value_(1)
+		},{
+			~b5.value_(0)
 		});
+	});
 
-		v6.mouseDownAction = {
-			arg view, x,y, m;
-			//var vis;
-			// if(~wpBool==false,{
-			/*if(~wp.isClosed==true,{
-			~wpFunc.play;
-			// ~wp.visible_(true);
-			},{
-			if(~wp.visible == true, {
-			~wp.visible=false
-			},{
-			~wp.visible=true
+	//WOLF%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-			});
 
-			});*/
-			if(~wpBool==false,
+	~wolfBus = Bus.audio(s,1);
+	~wolfSynth = Synth.newPaused(\wolf,[\outBus,~wolfBus]);
+
+
+	~labelWolf = StaticText(w2, Rect(20,0,titleWidth,titleHeight))
+	.string_("WOLF")
+	.align_(\center)
+	.font_(Font("Helvetica", 18).boldVariant)
+	.stringColor_(Color.black)
+	.background_(Color.white);
+
+	~knobLabelLenght= StaticText(w2, Rect(3*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Lenght")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	~knobLenght = Knob(w2, Rect(3*knobIntraDist,50,knobDim,knobDim))
+	.background_(Color.fromHexString("#78cdd7"))
+	.color_(~colors)
+	.value_(0.4)
+	.mode_(\vert)
+	.action_({
+		arg lenght;
+		~numberboxLenght.value_(lenght.value.linlin(0,1,2.5,5));
+		~wolfSynth.set(\length,~knobGrain.value.linlin(0,1,2.5,5))
+	});
+
+	~numberboxLenght = NumberBox(w2, Rect(3*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
+	.value_(3.5)
+	.normalColor_(Color.black)
+	.background_(Color.white)
+	.align_(\center)
+	.action_({
+		arg lenght;
+		~knobLenght.valueAction_(lenght.value.linlin(2.5,5,0,1));
+	});
+
+	~knobLabelGrain= StaticText(w2, Rect(8*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Grain")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	~knobGrain = Knob(w2, Rect(8*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.value_(0.162215)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_({
+		arg grain;
+		~numberboxGrain.value_(grain.value.linlin(0,1,0,1));
+		~wolfSynth.set(\grainPos,~knobGrain.value.linlin(0,1,0,1));
+	});
+
+	~numberboxGrain = NumberBox(w2, Rect(8*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
+	.normalColor_(Color.black)
+	.background_(Color.white)
+	.value_(0.162215)
+	.align_(\center)
+	.action_({
+		arg grain;
+		~knobGrain.valueAction_(grain.value.linlin(0,1,0,1));
+	});
+
+	~knobLabelOcc = StaticText(w2, Rect(12*knobIntraDist,1.1*marg,1.5*knobLabelWidth,20))
+	.string_("Occurrence")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	~knobOcc = Knob(w2, Rect(13*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.value_(0.25)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_({
+		arg occ;
+		~numberboxOcc.value_(occ.value.linlin(0,1,0.1,0.5));
+		~wolfSynth.set(\occurence,~knobOcc.value.linlin(0,1,0.1,0.5));
+	});
+
+	~numberboxOcc = NumberBox(w2, Rect(13*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
+	.value_(0.2)
+	.normalColor_(Color.black)
+	.background_(Color.white)
+	.align_(\center)
+	.action_({
+		arg occ;
+		~knobOcc.valueAction_(occ.value.linlin(0.1,0.5,0,1));
+	});
+
+	~knobLabelPanWolf= StaticText(w2, Rect(36*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Pan")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	/*~knobPanWolf*/~knobPos[1,2] = Knob(w2, Rect(36*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.centered_(true)
+	.value_(0.5)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_(
+		{
+			var angle,distance,x,y;
+			angle = ~knobPos[1,2].value.linlin(0,1,-pi/2,pi/2);
+			distance = ~knobPos[1,3].value.linlin(0,1,0,height-10);
+			x = (((distance*((angle).sin))+centerPosX)+elRadius);
+			y = ((((height-10)-(distance*(angle).cos)))+elRadius);
+			~knobPos[1,0] = x;
+			~knobPos[1,1] = y;
+			~knobPos[1,5].set(\angle,~knobPos[1,2].value.linlin(0,1,-1,1));
+			~knobPos[1,5].set(\radius,~knobPos[1,3].value);
+			v.refresh;
+			v6.refresh;
+	});
+
+	~knobLabelDistWolf= StaticText(w2, Rect(42*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Distance")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	/*~knobDistWolf*/ ~knobPos[1,3]= Knob(w2, Rect(42*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.value_(0.4)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_(
+		{
+			var angle,distance,x,y;
+			angle = ~knobPos[1,2].value.linlin(0,1,-pi/2,pi/2);
+			distance = ~knobPos[1,3].value.linlin(0,1,0,height-10);
+			x = (((distance*((angle).sin))+centerPosX)+elRadius);
+			y = ((((height-10)-(distance*(angle).cos)))+elRadius);
+			~knobPos[1,0] = x;
+			~knobPos[1,1] = y;
+			~knobPos[1,5].set(\angle,~knobPos[1,2].value.linlin(0,1,-1,1));
+			~knobPos[1,5].set(\radius,~knobPos[1,3].value);
+			v.refresh;
+			v6.refresh;
+	});
+
+	~b2 = Button.new(w2, Rect(48*knobIntraDist,40,60,knobDim))
+	.states_([
+		["PLAY", Color.black, Color.fromHexString("#78cdd7")],
+		["STOP",Color.white, Color.red(0.5)]
+	]).action_({ |b,sum| QtGUI.palette = if(b.value == 0);
+		if(b.value == 0,
+			{
+				~wolfSynth.run(false);
+				//postln("wolfsynth true");
+
+			},
+			{
+				~wolfSynth.run(true);
+				//postln("wolfsynth false");
+
+			}
+		);
+		sum = ~b1.value+~b2.value+~b3.value+~b4.value;
+		if(sum>0, {
+			~b5.value_(1)
+		},{
+			~b5.value_(0)
+		});
+	});
+
+
+
+	//FROG%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	/*
+	arg buff = a,
+	outBus = 0,
+	grainPos = 0.162215,
+	randomness = 1, // 0.0 - 1.0
+	excited1 = 1,  // 0.5 - 1.7
+	excited2 = 1.7;  // 0.5 - 1.7
+	*/
+	~frogBus = Bus.audio(s,1);
+	~frogSynth = Synth.newPaused(\frog,[\outBus,~frogBus]);
+	~labelFrog = StaticText(w3, Rect(20,0,1.5*titleWidth,titleHeight))
+	.string_("CRICKETS-FROGS")
+	.align_(\center)
+	.font_(Font("Helvetica", 18).boldVariant)
+	.stringColor_(Color.black)
+	.background_(Color.white);
+
+	~randomKnobLabel= StaticText(w3, Rect(3*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Random")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	~randomKnob = Knob(w3, Rect(3*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.value_(1)
+	.action_({
+		arg boh1;
+		~randomNumberbox.value_(boh1.value.linlin(0,1,0,1));
+		~frogSynth.set(\randomness,~randomKnob.value);
+	});
+
+	~randomNumberbox = NumberBox(w3, Rect(3*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
+	.normalColor_(Color.black)
+	.background_(Color.white)
+	.align_(\center)
+	.value_(1)
+	.action_({
+		arg boh1;
+		~randomKnob.valueAction_(boh1.value.linlin(0,1,0,1));
+		~frogSynth.set(\randomness,~randomKnob.value.linlin(0,1,0,1))
+	});
+
+	~excited1KnobLabel= StaticText(w3, Rect(8*knobIntraDist,1.1*marg,knobLabelWidth+5,20))
+	.string_("Occur. 1")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	~excited1Knob = Knob(w3, Rect(8*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.mode_(\vert)
+	.value_(5/12)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_({
+		arg boh2;
+		~excited1Numberbox.value_(boh2.value.linlin(0,1,0.5,1.7));
+		~frogSynth.set(\excited1,~excited1Knob.value.linlin(0,1,0.5,1.7));
+	});
+
+	~excited1Numberbox = NumberBox(w3, Rect(8*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
+	.normalColor_(Color.black)
+	.background_(Color.white)
+	.value_(1)
+	.align_(\center)
+	.action_({
+		arg boh2;
+		~excited1Knob.valueAction_(boh2.value.linlin(0.5,1.7,0,1));
+		//~frogSynth.set(\excited1,~excited1Knob.value.linlin(0.5,1.7,0,1));
+	});
+
+	~excited2KnobLabel = StaticText(w3, Rect(12*knobIntraDist,1.1*marg,1.5*knobLabelWidth,20))
+	.string_("Occur. 2")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	~excited2Knob = Knob(w3, Rect(13*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.mode_(\vert)
+	.value_(5/12)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_({
+		arg boh3;
+		~excited2Numberbox.value_(boh3.value.linlin(0,1,0.5,1.7));
+		~frogSynth.set(\excited2,~excited2Knob.value.linlin(0,1,0.5,1.7));
+	});
+
+	~excited2Numberbox = NumberBox(w3, Rect(13*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
+	.value_(1)
+	.normalColor_(Color.black)
+	.background_(Color.white)
+	.align_(\center)
+	.action_({
+		arg boh3;
+		~excited2Knob.valueAction_(boh3.value.linlin(0.5,1.7,0,1));
+	});
+
+	~knobLabelPanFrog= StaticText(w3, Rect(36*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Pan")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	/*~knobPanFrog*/~knobPos[2,2] = Knob(w3, Rect(36*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.centered_(true)
+	.value_(0.5)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_(
+		{
+			var angle,distance,x,y;
+			angle = ~knobPos[2,2].value.linlin(0,1,-pi/2,pi/2);
+			distance = ~knobPos[2,3].value.linlin(0,1,0,height-10);
+			x = (((distance*((angle).sin))+centerPosX)+elRadius);
+			y = ((((height-10)-(distance*(angle).cos)))+elRadius);
+			~knobPos[2,0] = x;
+			~knobPos[2,1] = y;
+			~knobPos[2,5].set(\angle,~knobPos[2,2].value.linlin(0,1,-1,1));
+			~knobPos[2,5].set(\radius,~knobPos[2,3].value);
+			v.refresh;
+			v6.refresh;
+	});
+
+	~knobLabelDistFrog= StaticText(w3, Rect(42*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Distance")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	/*~knobDistFrog*/ ~knobPos[2,3] = Knob(w3, Rect(42*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.value_(0.6)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_(
+		{
+			var angle,distance,x,y;
+			angle = ~knobPos[2,2].value.linlin(0,1,-pi/2,pi/2);
+			distance = ~knobPos[2,3].value.linlin(0,1,0,height-10);
+			x = (((distance*((angle).sin))+centerPosX)+elRadius);
+			y = ((((height-10)-(distance*(angle).cos)))+elRadius);
+			~knobPos[2,0] = x;
+			~knobPos[2,1] = y;
+			~knobPos[2,5].set(\angle,~knobPos[2,2].value.linlin(0,1,-1,1));
+			~knobPos[2,5].set(\radius,~knobPos[2,3].value);
+			v.refresh;
+			v6.refresh;
+	});
+
+	~b3 = Button.new(w3, Rect(48*knobIntraDist,40,60,knobDim))
+	.states_([
+		["PLAY", Color.black, Color.fromHexString("#78cdd7")],
+		["STOP",Color.white, Color.red(0.5)]
+	]).action_({ |b,sum|
+		QtGUI.palette = if(b.value == 0);
+		if(b.value == 0,
+			{
+				~frogSynth.run(false);
+				//postln("frogsynth true");
+			},
+			{
+				~frogSynth.run(true);
+				//postln("frogsynth false");
+			}
+		);
+		sum = ~b1.value+~b2.value+~b3.value+~b4.value;
+		if(sum>0, {
+			~b5.value_(1)
+		},{
+			~b5.value_(0)
+		});
+	});
+
+
+
+	//STEP%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+	~stepBus = Bus.audio(s,1);
+	~stepSynth = Synth.newPaused(\PassettiNeve,[\outBus,~stepBus]);
+	~labelStep = StaticText(w4, Rect(20,0,1.5*titleWidth,titleHeight))
+	.string_("FOOTSTEPS")
+	.align_(\center)
+	.font_(Font("HelveticaC", 18).boldVariant)
+	.stringColor_(Color.black)
+	.background_(Color.white);
+
+	~knobLabelSpeed= StaticText(w4, Rect(3*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Speed")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	~knobSpeed = Knob(w4, Rect(3*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_({
+		arg speed;
+		~numberboxSpeed.value_(speed.value.linlin(0,1,1,2));
+		~stepSynth.set(\speed,~knobSpeed.value.linlin(0,1,1,2));
+
+	});
+
+	~numberboxSpeed = NumberBox(w4, Rect(3*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
+	.value_(1)
+	.normalColor_(Color.black)
+	.background_(Color.white)
+	.align_(\center)
+	.action_({
+		arg speed;
+		~knobSpeed.valueAction_(speed.value.linlin(1,2,0,1));
+		~stepSynth.set(\speed,~knobSpeed.value.linlin(1,2,0,1));
+	});
+
+	~knobLabelSnowy= StaticText(w4, Rect(7*knobIntraDist,1.1*marg,1.5*knobLabelWidth,20))
+	.string_("Dirt/Snow")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	~knobSnowy = Knob(w4, Rect(8*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.mode_(\vert)
+	.value_(1)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_({
+		arg snowy;
+		~numberboxSnowy.value_(snowy.value.linlin(0,1,200,2000));
+		~stepSynth.set(\hpfreq,~knobSnowy.value.linlin(0,1,200,2000));
+	});
+
+	~numberboxSnowy = NumberBox(w4, Rect(8*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
+	.value_(2000)
+	.normalColor_(Color.black)
+	.background_(Color.white)
+	.align_(\center)
+	.action_({
+		arg snowy;
+		~knobSnowy.valueAction_(snowy.value.linlin(200,2000,0,1));
+		~stepSynth.set(\hpfreq,~knobSnowy.value.linlin(200,2000,0,1));
+
+	});
+
+
+	~knobLabelPanStep= StaticText(w4, Rect(36*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Pan")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	/*~knobPanStep*/ ~knobPos[3,2] = Knob(w4, Rect(36*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.centered_(true)
+	.value_(0.5)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_(
+		{
+			var angle,distance,x,y;
+			angle = ~knobPos[3,2].value.linlin(0,1,-pi/2,pi/2);
+			distance = ~knobPos[3,3].value.linlin(0,1,0,height-10);
+			x = (((distance*((angle).sin))+centerPosX)+elRadius);
+			y = ((((height-10)-(distance*(angle).cos)))+elRadius);
+			~knobPos[3,0] = x;
+			~knobPos[3,1] = y;
+			~knobPos[3,5].set(\angle,~knobPos[3,2].value.linlin(0,1,-1,1));
+			~knobPos[3,5].set(\radius,~knobPos[3,3].value);
+			v.refresh;
+			v6.refresh;
+	});
+
+	~knobLabelDistStep= StaticText(w4, Rect(42*knobIntraDist,1.1*marg,knobLabelWidth,20))
+	.string_("Distance")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.background_(Color.rand);
+
+	/*~knobDistStep*/~knobPos[3,3] = Knob(w4, Rect(42*knobIntraDist,50,knobDim,knobDim))
+	.color_(~colors)
+	.value_(0.9)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_(
+		{
+			var angle,distance,x,y;
+			angle = ~knobPos[3,2].value.linlin(0,1,-pi/2,pi/2);
+			distance = ~knobPos[3,3].value.linlin(0,1,0,height-10);
+			x = (((distance*((angle).sin))+centerPosX)+elRadius);
+			y = ((((height-10)-(distance*(angle).cos)))+elRadius);
+			~knobPos[3,0] = x;
+			~knobPos[3,1] = y;
+			~knobPos[3,5].set(\angle,~knobPos[3,2].value.linlin(0,1,-1,1));
+			~knobPos[3,5].set(\radius,~knobPos[3,3].value);
+			v.refresh;
+			v6.refresh;
+	});
+
+	~b4=Button.new(w4, Rect(48*knobIntraDist,40,60,knobDim))
+	.states_([
+		["PLAY", Color.black, Color.fromHexString("#78cdd7")],
+		["STOP",Color.white, Color.red(0.5)]
+	])
+	.action_(
+		{ |b,sum| QtGUI.palette = if(b.value == 0);
+			if(b.value == 0,
 				{
-					~wpFunc.value;
-					~wp.visible_(true);
-					~wpBool = true;
+
+					~stepSynth.run(false);
+					~b5.value_(0);
 				},
 				{
-					~wp.close;
-					~wpBool = false;
-				}
+					~stepSynth.run(true);
+			});
+			sum = ~b1.value+~b2.value+~b3.value+~b4.value;
+			if(sum>0, {
+				~b5.value_(1)
+			},{
+				~b5.value_(0)
+			});
+	});
+
+	//SIDE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	~labelSide = StaticText(w5, Rect(15,0,sectWinHeight-30,titleHeight))
+	.string_("MASTER")
+	.align_(\center)
+	.font_(Font("Helvetica", 18).boldVariant)
+	.stringColor_(Color.black)
+	.background_(Color.white);
+
+	~b5 = Button.new(w5, Rect(knobIntraDist,40,105,knobDim))
+	.states_([
+		["PLAY ALL", Color.black, Color.fromHexString("#78cdd7")],
+		["STOP ALL",Color.white, Color.red(0.5)]
+	])
+	.action_(
+		{
+			|b| QtGUI.palette = if(b.value == 0);
+			if(b.value == 0,
+				{
+					~b1.valueAction_(0);
+					~b2.valueAction_(0);
+					~b3.valueAction_(0);
+					~b4.valueAction_(0);
+				},
+				{
+					~b1.valueAction_(1);
+					~b2.valueAction_(1);
+					~b3.valueAction_(1);
+					~b4.valueAction_(1);
+
+			});
+	});
+
+
+	~knobLabelReverb = StaticText(w5, Rect(1.2*knobIntraDist,110,2*knobDim,30))
+	.string_("Reverb")
+	.align_(\center)
+	.font_(Font("arial", 18).boldVariant)
+	.stringColor_(Color.white);
+	//.backColor_(Color.white);
+
+	~knobRoom = Knob(w5, Rect(0.7*knobIntraDist,160+15,knobDim,knobDim))
+	.color_(~colors)
+	.value_(0.7)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_({
+		arg room;
+		~roomer.set(\room,~knobRoom.value.linlin(0,1,0,1));
+
+	});
+
+	~knobLabelRoom = StaticText(w5, Rect(0.7*knobIntraDist,130+10,knobDim,knobDim))
+	.string_("Room")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+
+
+	~knobDamp = Knob(w5, Rect(5.5*knobIntraDist,160+15,knobDim,knobDim))
+	.color_(~colors)
+	.value_(0.3)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_({
+		arg damp;
+		~roomer.set(\damp,~knobDamp.value.linlin(0,1,0,1));
+
+	});
+	~knobLabelDamp = StaticText(w5, Rect(5.5*knobIntraDist,130+10,knobDim,knobDim))
+	.string_("Damp")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+
+	~knobLvl = Knob(w5, Rect(knobIntraDist*3.1,240,knobDim,knobDim))
+	.color_(~colors)
+	.value_(0.5)
+	.mode_(\vert)
+	.background_(Color.fromHexString("#78cdd7"))
+	.action_({
+		arg lvl;
+		~roomer.set(\amp,~knobLvl.value.linlin(0,1,-18,18));
+	});
+
+	~knobLabelLvl = StaticText(w5, Rect(3.1*knobIntraDist,205,knobDim,knobDim))
+	.string_("Lvl")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+
+
+	~knobLabelMasterVolume = StaticText(w5, Rect(1.2*knobIntraDist,300,2*knobDim,30))
+	.string_("Master Volume")
+	.align_(\center)
+	.font_(Font("arial", 12).boldVariant)
+	.stringColor_(Color.white);
+	//.backColor_(Color.white);
+
+	~masterVolume = Volume.new(s, 0, 2, -90, 6);
+
+	~spec = ControlSpec((3.16*(10**(-5))).ampdb, 2.ampdb, \db, units:"dB");
+
+
+	~masterSlider = Slider.new(w5, Rect(10,327,30,sectWinHeight-28))
+	.orientation_(\vertical)
+	.background_(Color.fromHexString("#78cdd7"))
+	.thumbSize_(20)
+	.knobColor_(Color.fromHexString("#78cdd7"))
+	.value_(~spec.unmap(0))
+	.action = {
+		~masterVolume.volume = ~spec.map(~masterSlider.value);
+	};
+
+
+
+
+	//master and reverb bus and Synths
+	~effectBus =Bus.audio(s,2);
+
+	{~roomer= Synth.tail(nil,\roomer,[\inBus,~effectBus,\outBus,0])}.defer(0.3);
+	{~stereoMaster = Synth.after(~roomer,\stereoMaster,[\inBus,0,\outBus,0,\amp,1])}.defer(0.4);
+
+	//oscilloscope creation
+	{Synth.after(~fireSynth,\scoping, [\buffy, ~bufFire.bufnum, \bus, ~fireBus,\amp,8])}.defer(0.18);
+	{Synth.after(~wolfSynth,\scoping, [\buffy, ~bufWolf.bufnum, \bus, ~wolfBus,\amp,8])}.defer(0.18);
+	{Synth.after(~frogSynth,\scoping, [\buffy, ~bufFrog.bufnum, \bus, ~frogBus,\amp,8])}.defer(0.18);
+	{Synth.after(~stepSynth,\scoping, [\buffy, ~bufStep.bufnum, \bus, ~stepBus,\amp,8])}.defer(0.18);
+
+	//positioner creation
+	{~knobPos[0,5] = Synth.after(~fireSynth,\positioner, [\inBus, ~fireBus,\mainOut,0,\angle,~knobPos[0,2].value.linlin(0,1,-1,1),\radius,~knobPos[0,3].value,\effectOut,~effectBus])}.defer(0.2);
+	{~knobPos[1,5] = Synth.after(~wolfSynth,\positioner, [\inBus, ~wolfBus,\mainOut,0,\angle,~knobPos[1,2].value.linlin(0,1,-1,1),\radius,~knobPos[1,3].value,\effectOut,~effectBus])}.defer(0.2);
+	{~knobPos[2,5] = Synth.after(~frogSynth,\positioner, [\inBus, ~frogBus,\mainOut,0,\angle,~knobPos[2,2].value.linlin(0,1,-1,1),\radius,~knobPos[2,3].value,\effectOut,~effectBus])}.defer(0.2);
+	{~knobPos[3,5] = Synth.after(~stepSynth,\positioner, [\inBus, ~stepBus,\mainOut,0,\angle,~knobPos[3,2].value.linlin(0,1,-1,1),\radius,~knobPos[3,3].value,\effectOut,~effectBus])}.defer(0.2);
+
+
+	//creation of main stereo meters
+
+	~meterL = LevelIndicator.new(w5, Rect(50,327,30,sectWinHeight-30))
+	.background_(Color.fromHexString("#028090"))
+	.warning_(0.6)
+	.drawsPeak_(true)
+	.meterColor_(Color.fromHexString("#78cdd7"))
+	.warningColor_(Color.fromHexString("#258de8"))
+	.criticalColor_(Color.fromHexString("#02427a"))
+	.critical_(0.8)
+	.numTicks_(0)
+	.style_(\led)
+	.numSteps_(20);
+
+	~meterR = LevelIndicator.new(w5, Rect(85,327,30,sectWinHeight-30))
+	.background_(Color.fromHexString("#028090"))
+	.warning_(0.6)
+	.drawsPeak_(true)
+	.meterColor_(Color.fromHexString("#78cdd7"))
+	.warningColor_(Color.fromHexString("#258de8"))
+	.criticalColor_(Color.fromHexString("#02427a"))
+	.critical_(0.8)
+	.numTicks_(0)
+	.style_(\led)
+	.numSteps_(20);
+
+	//control bus to send periodic amplitude level to the stereo meters
+
+	~krBus = Bus.control(s,2);
+	{~stereoMonitor = Synth.after(~stereoMaster,\stereoMonitor,[\inBus,0,\krBus,~krBus]);
+		~updateIndicator = fork{loop{
+			~krBus.get({
+				arg value;
+				{
+					//value[0].postln;
+					~meterL.value_(value[0]);
+					~meterR.value_(value[1]);
+					//~meter.peakLevel_(value[0]);
+				}.defer();
+			});
+			0.01.wait;
+		}
+	};}.defer(0.5);
+
+	//scope%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	~bufFire = Buffer.alloc(s, 1024, 1);
+	~scopefire = ScopeView(w1, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
+	~scopefire.bufnum = ~bufFire.bufnum;
+	~scopefire.server_(s);
+	~scopefire.start;
+
+	~bufWolf = Buffer.alloc(s, 1024, 1);
+	~scopewolf = ScopeView(w2, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
+	~scopewolf.bufnum = ~bufWolf.bufnum;
+	~scopewolf.server_(s);
+	~scopewolf.start;
+
+	~bufFrog = Buffer.alloc(s, 1024, 1);
+	~scopefrog = ScopeView(w3, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
+	~scopefrog.bufnum = ~bufFrog.bufnum;
+	~scopefrog.server_(s);
+	~scopefrog.start;
+
+	~bufStep = Buffer.alloc(s, 1024, 1);
+	~scopestep = ScopeView(w4, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
+	~scopestep.bufnum = ~bufStep.bufnum;
+	~scopestep.server_(s);
+	~scopestep.start;
+
+
+
+	//panner---------------------------------------------------------------------------
+	for (0, (numOfPoints-1), {
+		arg i;
+		var angle, distance;
+
+		angle = ~knobPos[i,2].value.linlin(0,1,(-pi/2),(pi/2));
+
+		distance = ~knobPos[i,3].value.linlin(0,1,0,(height-10));
+
+		x = (((distance*((angle).sin))+centerPosX));
+		y = ((((height-10)-(distance*(angle).cos))));
+		~knobPos[i,0] = x;
+		~knobPos[i,1] = y;
+	};
+	);
+
+
+
+	//function to create the panner view
+
+	~wpFunc = {
+		//.background_(Color.rand)
+		~wp = Window.new("spanner", Rect(panWinRL,panWinUpDown,panWinWidth,panWinHeight+18), false)
+		.front
+		.alwaysOnTop_(false)
+		.visible_(false)
+		.drawFunc_({});
+		v = UserView(~wp,Rect(0,0,width,height+18));
+
+
+		//function to draw the elements in the panner view
+		v.drawFunc = {
+			Pen.addRect(~wp.view.bounds.insetBy(0))
+			.fillRadialGradient( (panWinWidth/2)@(panWinHeight),(panWinWidth/2)@(panWinHeight),80,600,
+				Color.fromHexString("#05668d"), Color.fromHexString("#78cdd7"))
+			//.addOval(Rect((panWinWidth/2)-20,panWinHeight-20,40,40))
+			.color_(Color.white)
+			.fill
+			//i1.tileInRect(Rect(marg,marg,120,120),nil,2,1.0);
+			.addArc((panWinWidth/2)@(panWinHeight),25,pi,2pi)
+
+			.fill
+			.addArc((panWinWidth/2)@(panWinHeight),(height-10),pi,2pi)
+			.alpha_(0.8)
+			.stroke
+			.addArc((panWinWidth/2)@(panWinHeight),(height-10)/4*3,pi,2pi)
+			.alpha_(0.6)
+			.stroke
+			.addArc((panWinWidth/2)@(panWinHeight),(height-10)/2,pi,2pi)
+			.alpha_(0.4)
+			.stroke
+			.addArc((panWinWidth/2)@(panWinHeight),(height-10)/4,pi,2pi)
+			.alpha_(0.2)
+			.stroke;
+
+
+			for (0, (numOfPoints-1), {
+				arg i;
+				var angle, distance,angle01,distance01;
+
+				Pen.fillColor = Color.black;
+				Pen.strokeColor = Color.white;
+
+
+				Pen.drawImage( ((~knobPos[i,0])-18)@((~knobPos[i,1])-18), ~knobPos[i,4], operation: 'sourceOver', opacity:1);
+
+				Pen.fillStroke;
+			});
+		};
+
+		//function to select the element to move through the mouse pointer
+
+		v.mouseDownAction = { arg view, x,y, m;
+
+			([256, 0].includes(m)).if{ // restrict to no modifier
+				//value = (x).linlin(0,v.bounds.width,0,1); v.doAction};
+				var found = false;
+				for (0, numOfPoints-1, {
+					arg i;
+					if((x>=(~knobPos[i,0]-elRadius))&&((x<=(~knobPos[i,0]+elRadius)))&&((y>=(~knobPos[i,1]-elRadius)))&&((y<=(~knobPos[i,1]+elRadius))),{
+						selPos = i;
+						found =true;
+					});
+				});
+				if(found!=true,{selPos= (-1)});
+
+			};
+		};
+
+
+		//function to control the movement of audio elements inside the panner view
+
+		v.mouseMoveAction = {
+			arg view, x,y, m;
+			var angle,distance;
+			var l = (2*(height-10));
+			var h=(height-10);
+			if(selPos!=(-1),{
+				distance = (((((x-centerPosX).squared)+(y-centerPosY).squared).sqrt));
+				angle = (((x-centerPosX)/(y-centerPosY).abs).atan);
+				if(y>=height,{
+					y=height;
+				});
+				if(distance>=1.linlin(0,1,0,height-10),{
+					distance = 1.value.linlin(0,1,0,height-10);
+					x = (((distance*((angle).sin))+centerPosX));
+					if(y>=height,{
+						y=height;
+					},{
+						y = (((distance-(distance*(angle).cos))));
+					})
+
+				});
+				~knobPos[selPos,0] =x;
+				~knobPos[selPos,1] =y;
+				~knobPos[selPos,2].value_(angle.linlin(-pi/2,pi/2,0,1));
+				~knobPos[selPos,3].value_(distance.linlin(0,height-10,0,1));
+				~knobPos[selPos,5].set(\angle,~knobPos[selPos,2].value.linlin(0,1,-1,1));
+				~knobPos[selPos,5].set(\radius,~knobPos[selPos,3].value);
+
+				v.refresh;
+				v6.refresh;
+
+			};
 			)
 
 		};
 
 
 
-
-
-
-		// LABEL%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-		~labeltitle = StaticText(w, Rect((sectWinWidth/2)-(150/2),15,200,titleHeight+4))
-		.string_("GRANULANDS")
-		.align_(\center)
-		.font_(Font("Helvetica"/*"Cooper Black""Eras Bold ITC""Harlow Solid Italic""Matura MT Script Capitals""Swis721 BlkEx BT"*/, 20).boldVariant)
-		.stringColor_(Color.black)
-		.background_(Color.white);
-
-		//FIRE%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-		~fireBus = Bus.audio(s,1);
-		~fireSynth = Synth.newPaused(\fire,[\outBus,~fireBus]);
-
-		~labelFire = StaticText(w1, Rect(20,0,titleWidth,titleHeight))
-		.string_("FIRE")
-		.align_(\center)
-		.font_(Font("Helvetica", 18).boldVariant)
-		.background_(Color.white);
-
-		~knobLabelWood= StaticText(w1, Rect(3*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Wood")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		~knobWood = Knob(w1, Rect(3*knobIntraDist,50,knobDim,knobDim))
-		.value_(1/3)
-		.background_(Color.fromHexString("#78cdd7"))
-		.color_(~colors)
-		.mode_(\vert)
-		.action_({
-			arg wood;
-			~numberboxWood.value_(wood.value.linlin(0,1,0.5,2));
-			~fireSynth.set(\wood,~knobWood.value.linlin(0,1,0.5,2))
+		~wp.onClose_({
+			~wpBool=false;
 		});
 
-		~numberboxWood = NumberBox(w1, Rect(3*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
-		.value_(1)
-		.background_(Color.white)
-		.align_(\center)
-		.action_({
-			arg wood;
-			~knobWood.valueAction_(wood.value.linlin(0.5,2,0,1));
-		});
+	}.defer(0.1);
 
-		~knobLabelPanFire= StaticText(w1, Rect(36*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Pan")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		/*~knobPanFire*/ ~knobPos[0,2] = Knob(w1, Rect(36*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.centered_(true)
-		.value_(0.5)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_(
-			{
-				var angle,distance,x,y;
-				angle = ~knobPos[0,2].value.linlin(0,1,-pi/2,pi/2);
-				distance = ~knobPos[0,3].value.linlin(0,1,0,height-10);
-				x = (((distance*((angle).sin))+centerPosX)+elRadius);
-				y = ((((height-10)-(distance*(angle).cos)))+elRadius);
-				~knobPos[0,0] = x;
-				~knobPos[0,1] = y;
-				~knobPos[0,5].set(\angle,~knobPos[0,2].value.linlin(0,1,-1,1));
-				~knobPos[0,5].set(\radius,~knobPos[0,3].value);
-				v.refresh;
-				v6.refresh;
-		});
-
-		~knobLabelDistFire= StaticText(w1, Rect(42*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Distance")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		/*~knobDistFire*/ ~knobPos[0,3] = Knob(w1, Rect(42*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.value_(0.2)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_(
-			{
-				var angle,distance,x,y;
-				angle = ~knobPos[0,2].value.linlin(0,1,-pi/2,pi/2);
-				distance = ~knobPos[0,3].value.linlin(0,1,20,height-10);
-				x = (((distance*((angle).sin))+centerPosX)+elRadius);
-				y = ((((height-10)-(distance*(angle).cos)))+elRadius);
-				~knobPos[0,0] = x;
-				~knobPos[0,1] = y;
-				~knobPos[0,5].set(\angle,~knobPos[0,2].value.linlin(0,1,-1,1));
-				~knobPos[0,5].set(\radius,~knobPos[0,3].value);
-				v.refresh;
-				v6.refresh;
-		});
-		//"passed1?".postln;
-		~b1 = Button.new(w1, Rect(48*knobIntraDist,40,60,knobDim))
-		.states_([
-			["PLAY", Color.black, Color.fromHexString("#78cdd7")],
-			["STOP",Color.white, Color.red(0.5)]
-		])
-		.action_({ arg b,sum;
-			QtGUI.palette = if(b.value == 0);
-			//"aqi".postln;
-			if(b.value == 0,
-				{
-					~fireSynth.run(false);
-					//postln("firesynth true");
-
-				},
-				{
-					~fireSynth.run(true);
-					//postln("firesynth false");
-
-				}
-			);
-			sum = ~b1.value+~b2.value+~b3.value+~b4.value;
-			if(sum>0, {
-				~b5.value_(1)
-			},{
-				~b5.value_(0)
-			});
-		});
-
-		//WOLF%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-		~wolfBus = Bus.audio(s,1);
-		~wolfSynth = Synth.newPaused(\wolf,[\outBus,~wolfBus]);
-
-
-		~labelWolf = StaticText(w2, Rect(20,0,titleWidth,titleHeight))
-		.string_("WOLF")
-		.align_(\center)
-		.font_(Font("Helvetica", 18).boldVariant)
-		.background_(Color.white);
-
-		~knobLabelLenght= StaticText(w2, Rect(3*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Lenght")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		~knobLenght = Knob(w2, Rect(3*knobIntraDist,50,knobDim,knobDim))
-		.background_(Color.fromHexString("#78cdd7"))
-		.color_(~colors)
-		.value_(0.4)
-		.mode_(\vert)
-		.action_({
-			arg lenght;
-			~numberboxLenght.value_(lenght.value.linlin(0,1,2.5,5));
-			~wolfSynth.set(\length,~knobGrain.value.linlin(0,1,2.5,5))
-		});
-
-		~numberboxLenght = NumberBox(w2, Rect(3*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
-		.value_(3.5)
-		.background_(Color.white)
-		.align_(\center)
-		.action_({
-			arg lenght;
-			~knobLenght.valueAction_(lenght.value.linlin(2.5,5,0,1));
-		});
-
-		~knobLabelGrain= StaticText(w2, Rect(8*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Grain")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		~knobGrain = Knob(w2, Rect(8*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.value_(0.162215)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_({
-			arg grain;
-			~numberboxGrain.value_(grain.value.linlin(0,1,0,1));
-			~wolfSynth.set(\grainPos,~knobGrain.value.linlin(0,1,0,1));
-		});
-
-		~numberboxGrain = NumberBox(w2, Rect(8*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
-		.background_(Color.white)
-		.value_(0.162215)
-		.align_(\center)
-		.action_({
-			arg grain;
-			~knobGrain.valueAction_(grain.value.linlin(0,1,0,1));
-		});
-
-		~knobLabelOcc = StaticText(w2, Rect(12*knobIntraDist,1.1*marg,1.5*knobLabelWidth,20))
-		.string_("Occurrence")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		~knobOcc = Knob(w2, Rect(13*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.value_(0.25)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_({
-			arg occ;
-			~numberboxOcc.value_(occ.value.linlin(0,1,0.1,0.5));
-			~wolfSynth.set(\occurence,~knobOcc.value.linlin(0,1,0.1,0.5));
-		});
-
-		~numberboxOcc = NumberBox(w2, Rect(13*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
-		.value_(0.2)
-		.background_(Color.white)
-		.align_(\center)
-		.action_({
-			arg occ;
-			~knobOcc.valueAction_(occ.value.linlin(0.1,0.5,0,1));
-		});
-
-		~knobLabelPanWolf= StaticText(w2, Rect(36*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Pan")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		/*~knobPanWolf*/~knobPos[1,2] = Knob(w2, Rect(36*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.centered_(true)
-		.value_(0.5)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_(
-			{
-				var angle,distance,x,y;
-				angle = ~knobPos[1,2].value.linlin(0,1,-pi/2,pi/2);
-				distance = ~knobPos[1,3].value.linlin(0,1,0,height-10);
-				x = (((distance*((angle).sin))+centerPosX)+elRadius);
-				y = ((((height-10)-(distance*(angle).cos)))+elRadius);
-				~knobPos[1,0] = x;
-				~knobPos[1,1] = y;
-				~knobPos[1,5].set(\angle,~knobPos[1,2].value.linlin(0,1,-1,1));
-				~knobPos[1,5].set(\radius,~knobPos[1,3].value);
-				v.refresh;
-				v6.refresh;
-		});
-
-		~knobLabelDistWolf= StaticText(w2, Rect(42*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Distance")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		/*~knobDistWolf*/ ~knobPos[1,3]= Knob(w2, Rect(42*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.value_(0.4)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_(
-			{
-				var angle,distance,x,y;
-				angle = ~knobPos[1,2].value.linlin(0,1,-pi/2,pi/2);
-				distance = ~knobPos[1,3].value.linlin(0,1,0,height-10);
-				x = (((distance*((angle).sin))+centerPosX)+elRadius);
-				y = ((((height-10)-(distance*(angle).cos)))+elRadius);
-				~knobPos[1,0] = x;
-				~knobPos[1,1] = y;
-				~knobPos[1,5].set(\angle,~knobPos[1,2].value.linlin(0,1,-1,1));
-				~knobPos[1,5].set(\radius,~knobPos[1,3].value);
-				v.refresh;
-				v6.refresh;
-		});
-
-		~b2 = Button.new(w2, Rect(48*knobIntraDist,40,60,knobDim))
-		.states_([
-			["PLAY", Color.black, Color.fromHexString("#78cdd7")],
-			["STOP",Color.white, Color.red(0.5)]
-		]).action_({ |b,sum| QtGUI.palette = if(b.value == 0);
-			if(b.value == 0,
-				{
-					~wolfSynth.run(false);
-					//postln("wolfsynth true");
-
-				},
-				{
-					~wolfSynth.run(true);
-					//postln("wolfsynth false");
-
-				}
-			);
-			sum = ~b1.value+~b2.value+~b3.value+~b4.value;
-			if(sum>0, {
-				~b5.value_(1)
-			},{
-				~b5.value_(0)
-			});
-		});
-
-
-
-		//FROG%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		/*
-		arg buff = a,
-		outBus = 0,
-		grainPos = 0.162215,
-		randomness = 1, // 0.0 - 1.0
-		excited1 = 1,  // 0.5 - 1.7
-		excited2 = 1.7;  // 0.5 - 1.7
-		*/
-		~frogBus = Bus.audio(s,1);
-		~frogSynth = Synth.newPaused(\frog,[\outBus,~frogBus]);
-		~labelFrog = StaticText(w3, Rect(20,0,1.5*titleWidth,titleHeight))
-		.string_("CRICKETS-FROGS")
-		.align_(\center)
-		.font_(Font("Helvetica", 18).boldVariant)
-		.background_(Color.white);
-
-		~randomKnobLabel= StaticText(w3, Rect(3*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Random")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		~randomKnob = Knob(w3, Rect(3*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.value_(1)
-		.action_({
-			arg boh1;
-			~randomNumberbox.value_(boh1.value.linlin(0,1,0,1));
-			~frogSynth.set(\randomness,~randomKnob.value);
-		});
-
-		~randomNumberbox = NumberBox(w3, Rect(3*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
-		.background_(Color.white)
-		.align_(\center)
-		.value_(1)
-		.action_({
-			arg boh1;
-			~randomKnob.valueAction_(boh1.value.linlin(0,1,0,1));
-			~frogSynth.set(\randomness,~randomKnob.value.linlin(0,1,0,1))
-		});
-
-		~excited1KnobLabel= StaticText(w3, Rect(8*knobIntraDist,1.1*marg,knobLabelWidth+5,20))
-		.string_("Occur. 1")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		~excited1Knob = Knob(w3, Rect(8*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.mode_(\vert)
-		.value_(5/12)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_({
-			arg boh2;
-			~excited1Numberbox.value_(boh2.value.linlin(0,1,0.5,1.7));
-			~frogSynth.set(\excited1,~excited1Knob.value.linlin(0,1,0.5,1.7));
-		});
-
-		~excited1Numberbox = NumberBox(w3, Rect(8*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
-		.background_(Color.white)
-		.value_(1)
-		.align_(\center)
-		.action_({
-			arg boh2;
-			~excited1Knob.valueAction_(boh2.value.linlin(0.5,1.7,0,1));
-			//~frogSynth.set(\excited1,~excited1Knob.value.linlin(0.5,1.7,0,1));
-		});
-
-		~excited2KnobLabel = StaticText(w3, Rect(12*knobIntraDist,1.1*marg,1.5*knobLabelWidth,20))
-		.string_("Occur. 2")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		~excited2Knob = Knob(w3, Rect(13*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.mode_(\vert)
-		.value_(5/12)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_({
-			arg boh3;
-			~excited2Numberbox.value_(boh3.value.linlin(0,1,0.5,1.7));
-			~frogSynth.set(\excited2,~excited2Knob.value.linlin(0,1,0.5,1.7));
-		});
-
-		~excited2Numberbox = NumberBox(w3, Rect(13*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
-		.value_(1)
-		.background_(Color.white)
-		.align_(\center)
-		.action_({
-			arg boh3;
-			~excited2Knob.valueAction_(boh3.value.linlin(0.5,1.7,0,1));
-		});
-
-		~knobLabelPanFrog= StaticText(w3, Rect(36*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Pan")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		/*~knobPanFrog*/~knobPos[2,2] = Knob(w3, Rect(36*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.centered_(true)
-		.value_(0.5)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_(
-			{
-				var angle,distance,x,y;
-				angle = ~knobPos[2,2].value.linlin(0,1,-pi/2,pi/2);
-				distance = ~knobPos[2,3].value.linlin(0,1,0,height-10);
-				x = (((distance*((angle).sin))+centerPosX)+elRadius);
-				y = ((((height-10)-(distance*(angle).cos)))+elRadius);
-				~knobPos[2,0] = x;
-				~knobPos[2,1] = y;
-				~knobPos[2,5].set(\angle,~knobPos[2,2].value.linlin(0,1,-1,1));
-				~knobPos[2,5].set(\radius,~knobPos[2,3].value);
-				v.refresh;
-				v6.refresh;
-		});
-
-		~knobLabelDistFrog= StaticText(w3, Rect(42*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Distance")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		/*~knobDistFrog*/ ~knobPos[2,3] = Knob(w3, Rect(42*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.value_(0.6)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_(
-			{
-				var angle,distance,x,y;
-				angle = ~knobPos[2,2].value.linlin(0,1,-pi/2,pi/2);
-				distance = ~knobPos[2,3].value.linlin(0,1,0,height-10);
-				x = (((distance*((angle).sin))+centerPosX)+elRadius);
-				y = ((((height-10)-(distance*(angle).cos)))+elRadius);
-				~knobPos[2,0] = x;
-				~knobPos[2,1] = y;
-				~knobPos[2,5].set(\angle,~knobPos[2,2].value.linlin(0,1,-1,1));
-				~knobPos[2,5].set(\radius,~knobPos[2,3].value);
-				v.refresh;
-				v6.refresh;
-		});
-
-		~b3 = Button.new(w3, Rect(48*knobIntraDist,40,60,knobDim))
-		.states_([
-			["PLAY", Color.black, Color.fromHexString("#78cdd7")],
-			["STOP",Color.white, Color.red(0.5)]
-		]).action_({ |b,sum|
-			QtGUI.palette = if(b.value == 0);
-			if(b.value == 0,
-				{
-					~frogSynth.run(false);
-					//postln("frogsynth true");
-				},
-				{
-					~frogSynth.run(true);
-					//postln("frogsynth false");
-				}
-			);
-			sum = ~b1.value+~b2.value+~b3.value+~b4.value;
-			if(sum>0, {
-				~b5.value_(1)
-			},{
-				~b5.value_(0)
-			});
-		});
-
-
-
-		//STEP%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-		~stepBus = Bus.audio(s,1);
-		~stepSynth = Synth.newPaused(\PassettiNeve,[\outBus,~stepBus]);
-		~labelStep = StaticText(w4, Rect(20,0,1.5*titleWidth,titleHeight))
-		.string_("FOOTSTEPS")
-		.align_(\center)
-		.font_(Font("HelveticaC", 18).boldVariant)
-		.background_(Color.white);
-
-		~knobLabelSpeed= StaticText(w4, Rect(3*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Speed")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		~knobSpeed = Knob(w4, Rect(3*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_({
-			arg speed;
-			~numberboxSpeed.value_(speed.value.linlin(0,1,1,2));
-			~stepSynth.set(\speed,~knobSpeed.value.linlin(0,1,1,2));
-
-		});
-
-		~numberboxSpeed = NumberBox(w4, Rect(3*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
-		.value_(1)
-		.background_(Color.white)
-		.align_(\center)
-		.action_({
-			arg speed;
-			~knobSpeed.valueAction_(speed.value.linlin(1,2,0,1));
-			~stepSynth.set(\speed,~knobSpeed.value.linlin(1,2,0,1));
-		});
-
-		~knobLabelSnowy= StaticText(w4, Rect(7*knobIntraDist,1.1*marg,1.5*knobLabelWidth,20))
-		.string_("Dirt/Snow")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		~knobSnowy = Knob(w4, Rect(8*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.mode_(\vert)
-		.value_(1)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_({
-			arg snowy;
-			~numberboxSnowy.value_(snowy.value.linlin(0,1,200,2000));
-			~stepSynth.set(\hpfreq,~knobSnowy.value.linlin(0,1,200,2000));
-		});
-
-		~numberboxSnowy = NumberBox(w4, Rect(8*knobIntraDist,(knobIntraDist)+knobDim+(1.7*marg),numBoxWidth,numBoxHeight))
-		.value_(2000)
-		.background_(Color.white)
-		.align_(\center)
-		.action_({
-			arg snowy;
-			~knobSnowy.valueAction_(snowy.value.linlin(200,2000,0,1));
-			~stepSynth.set(\hpfreq,~knobSnowy.value.linlin(200,2000,0,1));
-
-		});
-
-
-		~knobLabelPanStep= StaticText(w4, Rect(36*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Pan")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		/*~knobPanStep*/ ~knobPos[3,2] = Knob(w4, Rect(36*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.centered_(true)
-		.value_(0.5)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_(
-			{
-				var angle,distance,x,y;
-				angle = ~knobPos[3,2].value.linlin(0,1,-pi/2,pi/2);
-				distance = ~knobPos[3,3].value.linlin(0,1,0,height-10);
-				x = (((distance*((angle).sin))+centerPosX)+elRadius);
-				y = ((((height-10)-(distance*(angle).cos)))+elRadius);
-				~knobPos[3,0] = x;
-				~knobPos[3,1] = y;
-				~knobPos[3,5].set(\angle,~knobPos[3,2].value.linlin(0,1,-1,1));
-				~knobPos[3,5].set(\radius,~knobPos[3,3].value);
-				v.refresh;
-				v6.refresh;
-		});
-
-		~knobLabelDistStep= StaticText(w4, Rect(42*knobIntraDist,1.1*marg,knobLabelWidth,20))
-		.string_("Distance")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.background_(Color.rand);
-
-		/*~knobDistStep*/~knobPos[3,3] = Knob(w4, Rect(42*knobIntraDist,50,knobDim,knobDim))
-		.color_(~colors)
-		.value_(0.9)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_(
-			{
-				var angle,distance,x,y;
-				angle = ~knobPos[3,2].value.linlin(0,1,-pi/2,pi/2);
-				distance = ~knobPos[3,3].value.linlin(0,1,0,height-10);
-				x = (((distance*((angle).sin))+centerPosX)+elRadius);
-				y = ((((height-10)-(distance*(angle).cos)))+elRadius);
-				~knobPos[3,0] = x;
-				~knobPos[3,1] = y;
-				~knobPos[3,5].set(\angle,~knobPos[3,2].value.linlin(0,1,-1,1));
-				~knobPos[3,5].set(\radius,~knobPos[3,3].value);
-				v.refresh;
-				v6.refresh;
-		});
-
-		~b4=Button.new(w4, Rect(48*knobIntraDist,40,60,knobDim))
-		.states_([
-			["PLAY", Color.black, Color.fromHexString("#78cdd7")],
-			["STOP",Color.white, Color.red(0.5)]
-		])
-		.action_(
-			{ |b,sum| QtGUI.palette = if(b.value == 0);
-				if(b.value == 0,
-					{
-
-						~stepSynth.run(false);
-						~b5.value_(0);
-					},
-					{
-						~stepSynth.run(true);
-				});
-				sum = ~b1.value+~b2.value+~b3.value+~b4.value;
-				if(sum>0, {
-					~b5.value_(1)
-				},{
-					~b5.value_(0)
-				});
-		});
-
-		//SIDE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-		~labelSide = StaticText(w5, Rect(15,0,sectWinHeight-30,titleHeight))
-		.string_("MASTER")
-		.align_(\center)
-		.font_(Font("Helvetica", 18).boldVariant)
-		.background_(Color.white);
-
-		~b5 = Button.new(w5, Rect(knobIntraDist,40,105,knobDim))
-		.states_([
-			["PLAY ALL", Color.black, Color.fromHexString("#78cdd7")],
-			["STOP ALL",Color.white, Color.red(0.5)]
-		])
-		.action_(
-			{
-				|b| QtGUI.palette = if(b.value == 0);
-				if(b.value == 0,
-					{
-						~b1.valueAction_(0);
-						~b2.valueAction_(0);
-						~b3.valueAction_(0);
-						~b4.valueAction_(0);
-					},
-					{
-						~b1.valueAction_(1);
-						~b2.valueAction_(1);
-						~b3.valueAction_(1);
-						~b4.valueAction_(1);
-
-				});
-		});
-
-
-		~knobLabelReverb = StaticText(w5, Rect(1.2*knobIntraDist,110,2*knobDim,30))
-		.string_("Reverb")
-		.align_(\center)
-		.font_(Font("arial", 18).boldVariant)
-		.stringColor_(Color.white);
-		//.backColor_(Color.white);
-
-		~knobRoom = Knob(w5, Rect(0.7*knobIntraDist,160+15,knobDim,knobDim))
-		.color_(~colors)
-		.value_(0.7)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_({
-			arg room;
-			~roomer.set(\room,~knobRoom.value.linlin(0,1,0,1));
-
-		});
-
-		~knobLabelRoom = StaticText(w5, Rect(0.7*knobIntraDist,130+10,knobDim,knobDim))
-		.string_("Room")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-
-
-		~knobDamp = Knob(w5, Rect(5.5*knobIntraDist,160+15,knobDim,knobDim))
-		.color_(~colors)
-		.value_(0.3)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_({
-			arg damp;
-			~roomer.set(\damp,~knobDamp.value.linlin(0,1,0,1));
-
-		});
-		~knobLabelDamp = StaticText(w5, Rect(5.5*knobIntraDist,130+10,knobDim,knobDim))
-		.string_("Damp")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-
-		~knobLvl = Knob(w5, Rect(knobIntraDist*3.1,240,knobDim,knobDim))
-		.color_(~colors)
-		.value_(0.5)
-		.mode_(\vert)
-		.background_(Color.fromHexString("#78cdd7"))
-		.action_({
-			arg lvl;
-			~roomer.set(\amp,~knobLvl.value.linlin(0,1,-18,18));
-		});
-
-		~knobLabelLvl = StaticText(w5, Rect(3.1*knobIntraDist,205,knobDim,knobDim))
-		.string_("Lvl")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-
-
-		~knobLabelMasterVolume = StaticText(w5, Rect(1.2*knobIntraDist,300,2*knobDim,30))
-		.string_("Master Volume")
-		.align_(\center)
-		.font_(Font("arial", 12).boldVariant)
-		.stringColor_(Color.white);
-		//.backColor_(Color.white);
-
-		~masterVolume = Volume.new(s, 0, 2, -90, 6);
-
-		~spec = ControlSpec((3.16*(10**(-5))).ampdb, 2.ampdb, \db, units:"dB");
-
-
-		~masterSlider = Slider.new(w5, Rect(10,327,30,sectWinHeight-28))
-		.orientation_(\vertical)
-		.background_(Color.fromHexString("#78cdd7"))
-		.thumbSize_(20)
-		.knobColor_(Color.fromHexString("#78cdd7"))
-		.value_(~spec.unmap(0))
-		.action = {
-			~masterVolume.volume = ~spec.map(~masterSlider.value);
-		};
-
-
-
-
-		//master and reverb bus and Synths
-		~effectBus =Bus.audio(s,2);
-
-		{~roomer= Synth.tail(nil,\roomer,[\inBus,~effectBus,\outBus,0])}.defer(0.3);
-		{~stereoMaster = Synth.after(~roomer,\stereoMaster,[\inBus,0,\outBus,0,\amp,1])}.defer(0.4);
-
-		//oscilloscope creation
-		{Synth.after(~fireSynth,\scoping, [\buffy, ~bufFire.bufnum, \bus, ~fireBus,\amp,8])}.defer(0.18);
-		{Synth.after(~wolfSynth,\scoping, [\buffy, ~bufWolf.bufnum, \bus, ~wolfBus,\amp,8])}.defer(0.18);
-		{Synth.after(~frogSynth,\scoping, [\buffy, ~bufFrog.bufnum, \bus, ~frogBus,\amp,8])}.defer(0.18);
-		{Synth.after(~stepSynth,\scoping, [\buffy, ~bufStep.bufnum, \bus, ~stepBus,\amp,8])}.defer(0.18);
-
-		//positioner creation
-		{~knobPos[0,5] = Synth.after(~fireSynth,\positioner, [\inBus, ~fireBus,\mainOut,0,\angle,~knobPos[0,2].value.linlin(0,1,-1,1),\radius,~knobPos[0,3].value,\effectOut,~effectBus])}.defer(0.2);
-		{~knobPos[1,5] = Synth.after(~wolfSynth,\positioner, [\inBus, ~wolfBus,\mainOut,0,\angle,~knobPos[1,2].value.linlin(0,1,-1,1),\radius,~knobPos[1,3].value,\effectOut,~effectBus])}.defer(0.2);
-		{~knobPos[2,5] = Synth.after(~frogSynth,\positioner, [\inBus, ~frogBus,\mainOut,0,\angle,~knobPos[2,2].value.linlin(0,1,-1,1),\radius,~knobPos[2,3].value,\effectOut,~effectBus])}.defer(0.2);
-		{~knobPos[3,5] = Synth.after(~stepSynth,\positioner, [\inBus, ~stepBus,\mainOut,0,\angle,~knobPos[3,2].value.linlin(0,1,-1,1),\radius,~knobPos[3,3].value,\effectOut,~effectBus])}.defer(0.2);
-
-
-		//creation of main stereo meters
-
-		~meterL = LevelIndicator.new(w5, Rect(50,327,30,sectWinHeight-30))
-		.background_(Color.fromHexString("#028090"))
-		.warning_(0.6)
-		.drawsPeak_(true)
-		.meterColor_(Color.fromHexString("#78cdd7"))
-		.warningColor_(Color.fromHexString("#258de8"))
-		.criticalColor_(Color.fromHexString("#02427a"))
-		.critical_(0.8)
-		.numTicks_(0)
-		.style_(\led)
-		.numSteps_(20);
-
-		~meterR = LevelIndicator.new(w5, Rect(85,327,30,sectWinHeight-30))
-		.background_(Color.fromHexString("#028090"))
-		.warning_(0.6)
-		.drawsPeak_(true)
-		.meterColor_(Color.fromHexString("#78cdd7"))
-		.warningColor_(Color.fromHexString("#258de8"))
-		.criticalColor_(Color.fromHexString("#02427a"))
-		.critical_(0.8)
-		.numTicks_(0)
-		.style_(\led)
-		.numSteps_(20);
-
-		//control bus to send periodic amplitude level to the stereo meters
-
-		~krBus = Bus.control(s,2);
-		{~stereoMonitor = Synth.after(~stereoMaster,\stereoMonitor,[\inBus,0,\krBus,~krBus]);
-			~updateIndicator = fork{loop{
-				~krBus.get({
-					arg value;
-					{
-						//value[0].postln;
-						~meterL.value_(value[0]);
-						~meterR.value_(value[1]);
-						//~meter.peakLevel_(value[0]);
-					}.defer();
-				});
-				0.01.wait;
-			}
-		};}.defer(0.5);
-
-		//scope%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-		~bufFire = Buffer.alloc(s, 1024, 1);
-		~scopefire = ScopeView(w1, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
-		~scopefire.bufnum = ~bufFire.bufnum;
-		~scopefire.server_(s);
-		~scopefire.start;
-
-		~bufWolf = Buffer.alloc(s, 1024, 1);
-		~scopewolf = ScopeView(w2, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
-		~scopewolf.bufnum = ~bufWolf.bufnum;
-		~scopewolf.server_(s);
-		~scopewolf.start;
-
-		~bufFrog = Buffer.alloc(s, 1024, 1);
-		~scopefrog = ScopeView(w3, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
-		~scopefrog.bufnum = ~bufFrog.bufnum;
-		~scopefrog.server_(s);
-		~scopefrog.start;
-
-		~bufStep = Buffer.alloc(s, 1024, 1);
-		~scopestep = ScopeView(w4, Rect(275,35, 150, 60)).resize_(5).style_(0).fill_(false).waveColors = [Color.fromHexString("#78cdd7"), Color.green];
-		~scopestep.bufnum = ~bufStep.bufnum;
-		~scopestep.server_(s);
-		~scopestep.start;
-
-
-
-		//panner---------------------------------------------------------------------------
-		for (0, (numOfPoints-1), {
-			arg i;
-			var angle, distance;
-
-			angle = ~knobPos[i,2].value.linlin(0,1,(-pi/2),(pi/2));
-
-			distance = ~knobPos[i,3].value.linlin(0,1,0,(height-10));
-
-			x = (((distance*((angle).sin))+centerPosX));
-			y = ((((height-10)-(distance*(angle).cos))));
-			~knobPos[i,0] = x;
-			~knobPos[i,1] = y;
-		};
-		);
-
-
-
-		//function to create the panner view
-
-		~wpFunc = {
-			//.background_(Color.rand)
-			~wp = Window.new("spanner", Rect(panWinRL,panWinUpDown,panWinWidth,panWinHeight+18), false)
-			.front
-			.alwaysOnTop_(false)
-			.visible_(false)
-			.drawFunc_({});
-			v = UserView(~wp,Rect(0,0,width,height+18));
-
-
-			//function to draw the elements in the panner view
-			v.drawFunc = {
-				Pen.addRect(~wp.view.bounds.insetBy(0))
-				.fillRadialGradient( (panWinWidth/2)@(panWinHeight),(panWinWidth/2)@(panWinHeight),80,600,
-					Color.fromHexString("#05668d"), Color.fromHexString("#78cdd7"))
-				//.addOval(Rect((panWinWidth/2)-20,panWinHeight-20,40,40))
-				.color_(Color.white)
-				.fill
-				//i1.tileInRect(Rect(marg,marg,120,120),nil,2,1.0);
-				.addArc((panWinWidth/2)@(panWinHeight),25,pi,2pi)
-
-				.fill
-				.addArc((panWinWidth/2)@(panWinHeight),(height-10),pi,2pi)
-				.alpha_(0.8)
-				.stroke
-				.addArc((panWinWidth/2)@(panWinHeight),(height-10)/4*3,pi,2pi)
-				.alpha_(0.6)
-				.stroke
-				.addArc((panWinWidth/2)@(panWinHeight),(height-10)/2,pi,2pi)
-				.alpha_(0.4)
-				.stroke
-				.addArc((panWinWidth/2)@(panWinHeight),(height-10)/4,pi,2pi)
-				.alpha_(0.2)
-				.stroke;
-
-
-				for (0, (numOfPoints-1), {
-					arg i;
-					var angle, distance,angle01,distance01;
-
-					Pen.fillColor = Color.black;
-					Pen.strokeColor = Color.white;
-
-
-					Pen.drawImage( ((~knobPos[i,0])-18)@((~knobPos[i,1])-18), ~knobPos[i,4], operation: 'sourceOver', opacity:1);
-
-					Pen.fillStroke;
-				});
-			};
-
-			//function to select the element to move through the mouse pointer
-
-			v.mouseDownAction = { arg view, x,y, m;
-
-				([256, 0].includes(m)).if{ // restrict to no modifier
-					//value = (x).linlin(0,v.bounds.width,0,1); v.doAction};
-					var found = false;
-					for (0, numOfPoints-1, {
-						arg i;
-						if((x>=(~knobPos[i,0]-elRadius))&&((x<=(~knobPos[i,0]+elRadius)))&&((y>=(~knobPos[i,1]-elRadius)))&&((y<=(~knobPos[i,1]+elRadius))),{
-							selPos = i;
-							found =true;
-						});
-					});
-					if(found!=true,{selPos= (-1)});
-
-				};
-			};
-
-
-			//function to control the movement of audio elements inside the panner view
-
-			v.mouseMoveAction = {
-				arg view, x,y, m;
-				var angle,distance;
-				var l = (2*(height-10));
-				var h=(height-10);
-				if(selPos!=(-1),{
-					distance = (((((x-centerPosX).squared)+(y-centerPosY).squared).sqrt));
-					angle = (((x-centerPosX)/(y-centerPosY).abs).atan);
-					if(y>=height,{
-						y=height;
-					});
-					if(distance>=1.linlin(0,1,0,height-10),{
-						distance = 1.value.linlin(0,1,0,height-10);
-						x = (((distance*((angle).sin))+centerPosX));
-						if(y>=height,{
-							y=height;
-						},{
-							y = (((distance-(distance*(angle).cos))));
-						})
-
-					});
-					~knobPos[selPos,0] =x;
-					~knobPos[selPos,1] =y;
-					~knobPos[selPos,2].value_(angle.linlin(-pi/2,pi/2,0,1));
-					~knobPos[selPos,3].value_(distance.linlin(0,height-10,0,1));
-					~knobPos[selPos,5].set(\angle,~knobPos[selPos,2].value.linlin(0,1,-1,1));
-					~knobPos[selPos,5].set(\radius,~knobPos[selPos,3].value);
-
-					v.refresh;
-					v6.refresh;
-
-				};
-				)
-
-			};
-
-
-
-			~wp.onClose_({
-				~wpBool=false;
-			});
-
-		}.defer(0.1);
-
-		~wpFunc.value;
-		"SYSTEM STARTED...".postln;
+	~wpFunc.value;
+	"SYSTEM STARTED...".postln;
 });
 )
